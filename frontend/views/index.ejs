@@ -5,122 +5,358 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JeevBandhu - Livestock Health Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/output.css">
 </head>
 
-<body class="bg-gradient-to-br from-emerald-50 to-green-100">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="text-2xl font-bold text-emerald-600">🐄 JeevBandhu</div>
-                <div class="space-x-4">
-                    <a href="/login" class="text-gray-700 hover:text-emerald-600 transition">Login</a>
-                    <a href="/register" class="btn-primary">Get Started</a>
+<body class="bg-surface-light min-h-screen font-sans overflow-x-hidden">
+
+    <!-- ============ HERO ============ -->
+    <header class="relative min-h-screen flex flex-col bg-gradient-to-br from-slate-950 via-emerald-950 to-slate-900 overflow-hidden">
+
+        <!-- Floating particles -->
+        <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+            <span class="particle" style="left: 6%;  width: 8px;  height: 8px;  animation-duration: 14s; animation-delay: 0s;"></span>
+            <span class="particle" style="left: 14%; width: 5px;  height: 5px;  animation-duration: 18s; animation-delay: 2s;"></span>
+            <span class="particle" style="left: 23%; width: 10px; height: 10px; animation-duration: 16s; animation-delay: 5s;"></span>
+            <span class="particle" style="left: 32%; width: 4px;  height: 4px;  animation-duration: 20s; animation-delay: 1s;"></span>
+            <span class="particle" style="left: 41%; width: 7px;  height: 7px;  animation-duration: 15s; animation-delay: 7s;"></span>
+            <span class="particle" style="left: 50%; width: 6px;  height: 6px;  animation-duration: 22s; animation-delay: 3s;"></span>
+            <span class="particle" style="left: 59%; width: 9px;  height: 9px;  animation-duration: 17s; animation-delay: 9s;"></span>
+            <span class="particle" style="left: 67%; width: 5px;  height: 5px;  animation-duration: 19s; animation-delay: 4s;"></span>
+            <span class="particle" style="left: 75%; width: 8px;  height: 8px;  animation-duration: 13s; animation-delay: 6s;"></span>
+            <span class="particle" style="left: 83%; width: 4px;  height: 4px;  animation-duration: 21s; animation-delay: 8s;"></span>
+            <span class="particle" style="left: 90%; width: 7px;  height: 7px;  animation-duration: 16s; animation-delay: 2.5s;"></span>
+            <span class="particle" style="left: 96%; width: 6px;  height: 6px;  animation-duration: 18s; animation-delay: 10s;"></span>
+        </div>
+
+        <!-- Soft glow accents -->
+        <div class="absolute -top-32 -right-32 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+        <div class="absolute -bottom-40 -left-32 w-[28rem] h-[28rem] bg-emerald-400/5 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+
+        <!-- Glass Navigation -->
+        <nav class="nav-glass sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <a href="/" class="flex items-center gap-2 text-xl font-extrabold gradient-text">
+                        <span class="text-2xl">🐄</span> JeevBandhu
+                    </a>
+                    <div class="flex items-center gap-3 sm:gap-4">
+                        <a href="/login" class="nav-link">Login</a>
+                        <a href="/register" class="btn-primary text-sm px-4 py-2 sm:px-5 sm:py-2.5">Get Started</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero content -->
+        <div class="relative z-10 flex-1 flex items-center">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 text-center w-full">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-400/20 text-emerald-300 text-sm font-semibold mb-8 animate-fade-in">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2.25c-.98 0-1.813.626-2.122 1.5H7.5A2.25 2.25 0 005.25 6v13.5A2.25 2.25 0 007.5 21.75h9a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25h-2.378A2.251 2.251 0 0012 2.25zM10.72 12.53a.75.75 0 10-1.06 1.06l1.5 1.5a.75.75 0 001.137-.089l3.857-5.401a.75.75 0 10-1.22-.872l-3.353 4.692-.861-.86z" clip-rule="evenodd"/></svg>
+                    India's Bio-Safe Livestock Platform
+                </span>
+                <h1 class="display-title text-white mb-6 animate-slide-up">
+                    Bio-Safe Livestock,<br>
+                    <span class="gradient-text">Verified from Farm to Table</span>
+                </h1>
+                <p class="text-lg md:text-xl text-slate-300 mb-10 max-w-3xl mx-auto animate-slide-up">
+                    Track animal health, ensure withdrawal compliance, and trade with complete transparency.
+                    JeevBandhu creates a verified marketplace for antibiotic-free livestock products.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 animate-slide-up">
+                    <a href="/register?role=farmer" class="btn-primary text-lg px-8 py-4 w-full sm:w-auto text-center">
+                        <span class="inline-flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/></svg>
+                            I'm a Farmer
+                        </span>
+                    </a>
+                    <a href="/register?role=buyer" class="btn-gold text-lg px-8 py-4 w-full sm:w-auto text-center">
+                        <span class="inline-flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z"/></svg>
+                            I'm a Buyer
+                        </span>
+                    </a>
                 </div>
             </div>
         </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div class="text-center">
-            <h1 class="text-5xl font-bold text-gray-900 mb-6">
-                Bio-Safe Livestock Management
-            </h1>
-            <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-                Track animal health, ensure withdrawal compliance, and trade with complete transparency.
-                JeevBandhu creates a verified marketplace for antibiotic-free livestock products.
-            </p>
-            <div class="flex justify-center space-x-6">
-                <a href="/register?role=farmer" class="btn-primary text-lg px-8 py-4">
-                    I'm a Farmer
-                </a>
-                <a href="/register?role=buyer"
-                    class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition">
-                    I'm a Buyer
-                </a>
+        <!-- Scroll hint -->
+        <div class="relative z-10 pb-8 flex justify-center" aria-hidden="true">
+            <svg class="w-6 h-6 text-emerald-400/60 animate-float" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+        </div>
+    </header>
+
+    <!-- ============ STATS BAR ============ -->
+    <section class="bg-slate-950 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div class="reveal">
+                <p class="text-4xl md:text-5xl font-extrabold gradient-text tabular-nums">
+                    <span class="counter" data-target="2400" data-suffix="+">0</span>
+                </p>
+                <p class="label-caps text-slate-400 mt-2">Animals Tracked</p>
+            </div>
+            <div class="reveal">
+                <p class="text-4xl md:text-5xl font-extrabold gradient-text tabular-nums">
+                    <span class="counter" data-target="98" data-suffix="%">0</span>
+                </p>
+                <p class="label-caps text-slate-400 mt-2">Compliance Rate</p>
+            </div>
+            <div class="reveal">
+                <p class="text-4xl md:text-5xl font-extrabold gradient-text tabular-nums">
+                    ₹<span class="counter" data-target="12" data-suffix="L+">0</span>
+                </p>
+                <p class="label-caps text-slate-400 mt-2">In Safe Sales</p>
             </div>
         </div>
     </section>
 
-    <!-- Three Pillars Section -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">The Three Pillars</h2>
-
-        <div class="grid md:grid-cols-3 gap-8">
-            <!-- Pillar A -->
-            <div class="card">
-                <div class="text-4xl mb-4">📋</div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Digital Health Passport</h3>
-                <p class="text-gray-600">
-                    Every animal has a unique profile with complete medical history, genetic lineage,
-                    and real-time health tracking.
-                </p>
-            </div>
-
-            <!-- Pillar B -->
-            <div class="card">
-                <div class="text-4xl mb-4">🔒</div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Bio-Safety Engine</h3>
-                <p class="text-gray-600">
-                    Automatic withdrawal period enforcement. Animals under medication are locked
-                    from production until scientifically safe.
-                </p>
-            </div>
-
-            <!-- Pillar C -->
-            <div class="card">
-                <div class="text-4xl mb-4">✅</div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Verified Marketplace</h3>
-                <p class="text-gray-600">
-                    Only bio-safe products can be listed. Buyers get complete transparency
-                    with cryptographic proof of compliance.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="bg-white py-16 mt-12">
+    <!-- ============ THREE PILLARS ============ -->
+    <section class="bg-slate-950 pb-20 pt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Why JeevBandhu?</h2>
+            <h2 class="section-title text-white text-center mb-4 reveal">The Three Pillars</h2>
+            <p class="text-slate-400 text-center max-w-2xl mx-auto mb-14 reveal">
+                One connected system that keeps livestock healthy, products safe, and buyers confident.
+            </p>
 
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="flex items-start space-x-4">
-                    <div class="text-2xl">🎯</div>
-                    <div>
-                        <h3 class="font-bold text-lg mb-2">Automated Compliance</h3>
-                        <p class="text-gray-600">No manual tracking. System automatically enforces withdrawal periods.
-                        </p>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Pillar A -->
+                <div class="card-glass reveal group transition-all duration-300 hover:-translate-y-2 hover:shadow-glow-emerald">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-gradient flex items-center justify-center mb-6 shadow-glow-emerald group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Digital Health Passport</h3>
+                    <p class="text-slate-300">
+                        Every animal has a unique profile with complete medical history, genetic lineage,
+                        and real-time health tracking.
+                    </p>
+                </div>
+
+                <!-- Pillar B -->
+                <div class="card-glass reveal group transition-all duration-300 hover:-translate-y-2 hover:shadow-glow-emerald">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-gradient flex items-center justify-center mb-6 shadow-glow-emerald group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Bio-Safety Engine</h3>
+                    <p class="text-slate-300">
+                        Automatic withdrawal period enforcement. Animals under medication are locked
+                        from production until scientifically safe.
+                    </p>
+                </div>
+
+                <!-- Pillar C -->
+                <div class="card-glass reveal group transition-all duration-300 hover:-translate-y-2 hover:shadow-glow-emerald">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-gradient flex items-center justify-center mb-6 shadow-glow-emerald group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Verified Marketplace</h3>
+                    <p class="text-slate-300">
+                        Only bio-safe products can be listed. Buyers get complete transparency
+                        with cryptographic proof of compliance.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ HOW IT WORKS ============ -->
+    <section class="bg-surface-light py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="section-title text-gray-900 text-center mb-4 reveal">How it Works</h2>
+            <p class="text-gray-600 text-center max-w-2xl mx-auto mb-16 reveal">
+                From first login to verified sale in four simple steps.
+            </p>
+
+            <div class="relative">
+                <!-- Connector line (desktop) -->
+                <div class="hidden md:block absolute top-8 left-[12.5%] right-[12.5%] h-0.5 bg-gradient-to-r from-emerald-200 via-emerald-400 to-emerald-200" aria-hidden="true"></div>
+                <!-- Connector line (mobile) -->
+                <div class="md:hidden absolute top-8 bottom-8 left-8 w-0.5 bg-gradient-to-b from-emerald-200 via-emerald-400 to-emerald-200" aria-hidden="true"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-6">
+                    <div class="relative flex md:flex-col items-start md:items-center md:text-center gap-5 md:gap-0 reveal">
+                        <div class="relative z-10 w-16 h-16 shrink-0 rounded-full bg-brand-gradient text-white flex items-center justify-center text-2xl font-extrabold shadow-glow-emerald md:mb-5">1</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900 mb-1">Register</h3>
+                            <p class="text-gray-600 text-sm">Create your free farmer or buyer account in under two minutes.</p>
+                        </div>
+                    </div>
+                    <div class="relative flex md:flex-col items-start md:items-center md:text-center gap-5 md:gap-0 reveal">
+                        <div class="relative z-10 w-16 h-16 shrink-0 rounded-full bg-brand-gradient text-white flex items-center justify-center text-2xl font-extrabold shadow-glow-emerald md:mb-5">2</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900 mb-1">Add Animals</h3>
+                            <p class="text-gray-600 text-sm">Give every animal its own digital health passport and unique ID.</p>
+                        </div>
+                    </div>
+                    <div class="relative flex md:flex-col items-start md:items-center md:text-center gap-5 md:gap-0 reveal">
+                        <div class="relative z-10 w-16 h-16 shrink-0 rounded-full bg-brand-gradient text-white flex items-center justify-center text-2xl font-extrabold shadow-glow-emerald md:mb-5">3</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900 mb-1">Track Health</h3>
+                            <p class="text-gray-600 text-sm">Log treatments — withdrawal periods are enforced automatically.</p>
+                        </div>
+                    </div>
+                    <div class="relative flex md:flex-col items-start md:items-center md:text-center gap-5 md:gap-0 reveal">
+                        <div class="relative z-10 w-16 h-16 shrink-0 rounded-full bg-brand-gradient text-white flex items-center justify-center text-2xl font-extrabold shadow-glow-emerald md:mb-5">4</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900 mb-1">Sell Verified</h3>
+                            <p class="text-gray-600 text-sm">List bio-safe products on the marketplace with proof of compliance.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ WHY JEEVBANDHU ============ -->
+    <section class="bg-white py-20">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="section-title text-gray-900 text-center mb-16 reveal">Why JeevBandhu?</h2>
+
+            <div class="space-y-14">
+                <!-- Feature 1 -->
+                <div class="flex flex-col md:flex-row items-center gap-8 reveal">
+                    <div class="w-20 h-20 shrink-0 rounded-3xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
+                        <svg class="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <h3 class="font-bold text-xl text-gray-900 mb-2">Automated Compliance</h3>
+                        <p class="text-gray-600">No manual tracking. System automatically enforces withdrawal periods.</p>
                     </div>
                 </div>
 
-                <div class="flex items-start space-x-4">
-                    <div class="text-2xl">🛡️</div>
-                    <div>
-                        <h3 class="font-bold text-lg mb-2">Consumer Trust</h3>
+                <!-- Feature 2 (reversed) -->
+                <div class="flex flex-col md:flex-row-reverse items-center gap-8 reveal">
+                    <div class="w-20 h-20 shrink-0 rounded-3xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
+                        <svg class="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+                    </div>
+                    <div class="text-center md:text-right">
+                        <h3 class="font-bold text-xl text-gray-900 mb-2">Consumer Trust</h3>
                         <p class="text-gray-600">Buyers see complete medical history before purchasing.</p>
                     </div>
                 </div>
 
-                <div class="flex items-start space-x-4">
-                    <div class="text-2xl">🌐</div>
-                    <div>
-                        <h3 class="font-bold text-lg mb-2">Traceability</h3>
+                <!-- Feature 3 -->
+                <div class="flex flex-col md:flex-row items-center gap-8 reveal">
+                    <div class="w-20 h-20 shrink-0 rounded-3xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
+                        <svg class="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m-18.432 0A8.959 8.959 0 013 12c0-1.605.42-3.113 1.157-4.418"/></svg>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <h3 class="font-bold text-xl text-gray-900 mb-2">Traceability</h3>
                         <p class="text-gray-600">Every product linked to its source animal for full traceability.</p>
+                    </div>
+                </div>
+
+                <!-- Feature 4 (reversed) -->
+                <div class="flex flex-col md:flex-row-reverse items-center gap-8 reveal">
+                    <div class="w-20 h-20 shrink-0 rounded-3xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
+                        <svg class="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/></svg>
+                    </div>
+                    <div class="text-center md:text-right">
+                        <h3 class="font-bold text-xl text-gray-900 mb-2">AI Health Assistant</h3>
+                        <p class="text-gray-600">Get instant AI-powered guidance on symptoms, treatments, and safe medicine use for your herd.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8 mt-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-gray-300">© 2024 JeevBandhu - Ensuring Bio-Safe Livestock Products</p>
+    <!-- ============ TESTIMONIAL ============ -->
+    <section class="bg-surface-light py-20">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="card border-l-4 border-emerald-500 reveal">
+                <svg class="w-10 h-10 text-emerald-200 mb-4" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zM0 21v-7.391C0 7.905 3.748 4.039 9 3l.996 2.151C7.563 6.068 6 8.789 6 11h4v10H0z"/></svg>
+                <blockquote class="text-lg md:text-xl text-gray-800 leading-relaxed mb-6">
+                    "Earlier I kept treatment records in a notebook and buyers just had to trust my word.
+                    Now every animal has a digital passport, and my milk sells faster because buyers can
+                    see the bio-safe proof themselves."
+                </blockquote>
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-brand-gradient text-white flex items-center justify-center font-bold text-lg shadow-glow-emerald">RP</div>
+                    <div>
+                        <p class="font-bold text-gray-900">Ramesh Patil</p>
+                        <p class="text-sm text-gray-500">Dairy Farmer, Kolhapur — 40 animals tracked</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ CTA BANNER ============ -->
+    <section class="relative bg-gradient-to-br from-slate-950 via-emerald-950 to-slate-900 py-20 overflow-hidden">
+        <div class="absolute -top-24 right-1/4 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">Ready to make your farm bio-safe?</h2>
+            <p class="text-slate-300 text-lg mb-8 max-w-2xl mx-auto">
+                Join thousands of farmers building consumer trust with verified, antibiotic-free livestock products.
+            </p>
+            <a href="/register" class="btn-gold text-lg px-10 py-4 inline-block">Get Started Free</a>
+        </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="bg-slate-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <p class="text-xl font-extrabold text-white">🐄 JeevBandhu</p>
+                <p class="text-slate-400 text-sm mt-3">Bio-safe livestock health management for Indian farmers. Smart forecasting for healthy livestock. 🌱</p>
+            </div>
+            <div>
+                <p class="label-caps text-emerald-400 mb-3">Platform</p>
+                <ul class="space-y-2 text-sm text-slate-300">
+                    <li><a href="/login" class="hover:text-emerald-400 transition">Login</a></li>
+                    <li><a href="/register" class="hover:text-emerald-400 transition">Register</a></li>
+                    <li><a href="/marketplace" class="hover:text-emerald-400 transition">Marketplace</a></li>
+                </ul>
+            </div>
+            <div>
+                <p class="label-caps text-emerald-400 mb-3">Resources</p>
+                <ul class="space-y-2 text-sm text-slate-300">
+                    <li><a href="/guide/medicine-guide" class="hover:text-emerald-400 transition">Medicine Guide</a></li>
+                    <li><a href="/ai-assistant" class="hover:text-emerald-400 transition">AI Assistant</a></li>
+                    <li><a href="/compliance" class="hover:text-emerald-400 transition">Biosecurity</a></li>
+                </ul>
+            </div>
+            <div>
+                <p class="label-caps text-emerald-400 mb-3">Trust</p>
+                <p class="text-sm text-slate-300">Every product verified bio-safe with full withdrawal-period compliance.</p>
+            </div>
+        </div>
+        <div class="border-t border-white/10">
+            <p class="text-center text-slate-500 text-sm py-5">© 2024 JeevBandhu — Ensuring Bio-Safe Livestock Products</p>
         </div>
     </footer>
+
+    <script>
+        // Scroll reveal
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); revealObserver.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // Animated counters (count up on scroll into view)
+        function animateCounter(el) {
+            const target = parseInt(el.dataset.target, 10);
+            const suffix = el.dataset.suffix || '';
+            const duration = 1600;
+            const start = performance.now();
+            function tick(now) {
+                const progress = Math.min((now - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+                const value = Math.round(target * eased);
+                el.textContent = value.toLocaleString('en-IN') + suffix;
+                if (progress < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+        }
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) { animateCounter(e.target); counterObserver.unobserve(e.target); }
+            });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+    </script>
 </body>
 
 </html>

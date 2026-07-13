@@ -15,18 +15,18 @@ async function connectDB() {
       throw new Error('MONGODB_URI is not defined in environment variables');
     }
 
+    const isAtlas = uri.includes('mongodb+srv');
+
     client = new MongoClient(uri, {
       maxPoolSize: 10,
       minPoolSize: 2,
       serverSelectionTimeoutMS: 30000,
       retryWrites: true,
-      ssl: true,
-      tls: true,
-      tlsAllowInvalidCertificates: true,
+      ...(isAtlas && { ssl: true, tls: true, tlsAllowInvalidCertificates: true }),
     });
 
     await client.connect();
-    console.log('✅ Connected to MongoDB Atlas');
+    console.log(`✅ Connected to MongoDB (${isAtlas ? 'Atlas' : 'Local'})`);
 
     db = client.db('jeevbandhu');
 

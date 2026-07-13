@@ -7,174 +7,382 @@
     <title>
         <%= animal.tagId %> - JeevBandhu
     </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/output.css">
+    <style>
+        /* Timeline alternation: single column on mobile, alternating on lg */
+        .timeline-entry { position: relative; }
+        @media (min-width: 1024px) {
+            .timeline-track .timeline-entry:nth-child(odd) .timeline-card { margin-right: calc(50% + 2.5rem); }
+            .timeline-track .timeline-entry:nth-child(even) .timeline-card { margin-left: calc(50% + 2.5rem); }
+        }
+        .tab-btn { position: relative; padding: 1rem 0.25rem; font-weight: 600; color: #6b7280; transition: color .2s; white-space: nowrap; }
+        .tab-btn:hover { color: #065f46; }
+        .tab-btn::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; border-radius: 9999px; background: linear-gradient(90deg, #065f46, #10b981); transform: scaleX(0); transition: transform .25s ease; }
+        .tab-btn.tab-active { color: #065f46; }
+        .tab-btn.tab-active::after { transform: scaleX(1); }
+    </style>
 </head>
 
-<body class="bg-gray-50">
+<body class="bg-surface-light min-h-screen font-sans">
     <!-- Navigation -->
-    <nav class="bg-white shadow-md">
+    <nav class="nav-glass sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <a href="/dashboard" class="text-2xl font-bold text-emerald-600">🐄 JeevBandhu</a>
-                <div class="flex items-center space-x-6">
-                    <a href="/dashboard" class="text-gray-700 hover:text-emerald-600 transition">Dashboard</a>
-                    <span class="text-gray-600">Hi, <%= user.name %></span>
+                <a href="/dashboard" class="flex items-center gap-2 text-xl font-extrabold gradient-text">
+                    <span class="text-2xl">🐄</span> JeevBandhu
+                </a>
+                <div class="hidden lg:flex items-center gap-6">
+                    <a href="/dashboard" class="nav-link active">Dashboard</a>
+                    <div class="relative group">
+                        <button class="nav-link inline-flex items-center gap-1">Farm
+                            <svg class="w-3.5 h-3.5 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="w-56 bg-white rounded-2xl shadow-xl border border-emerald-100 py-2 overflow-hidden">
+                                <a href="/animals/add" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">➕ Add Animal</a>
+                                <a href="/dashboard" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">📊 My Animals</a>
+                                <a href="/ai-assistant" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">🩺 AI Diagnosis</a>
+                                <a href="/guide/medicine-guide" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">💊 Medicine Guide</a>
+                                <a href="/compliance" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">✅ Biosecurity</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative group">
+                        <button class="nav-link inline-flex items-center gap-1">Commerce
+                            <svg class="w-3.5 h-3.5 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="w-56 bg-white rounded-2xl shadow-xl border border-emerald-100 py-2 overflow-hidden">
+                                <a href="/marketplace" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">🛒 Browse Marketplace</a>
+                                <a href="/list-product" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">➕ List Product</a>
+                                <a href="/my-products" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">📦 My Products</a>
+                                <a href="/orders/sales" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">💰 Sales</a>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/community" class="nav-link">Community</a>
+                    <span class="px-3 py-1.5 bg-emerald-50 text-emerald-800 rounded-full text-sm font-semibold">Hi, <%= user.name %></span>
                     <form action="/logout" method="POST" class="inline">
-                        <button type="submit" class="text-red-600 hover:text-red-700 transition">Logout</button>
+                        <button type="submit" class="text-red-600 hover:text-red-700 font-medium transition">Logout</button>
                     </form>
                 </div>
+                <!-- Mobile hamburger -->
+                <button id="mobileMenuBtn" class="lg:hidden flex flex-col justify-center items-center w-10 h-10 hamburger z-50 relative" aria-label="Menu">
+                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
+                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
+                    <span class="block w-6 h-0.5 bg-gray-700"></span>
+                </button>
+            </div>
+        </div>
+        <div id="mobileMenu" class="mobile-menu hidden fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-40 lg:hidden overflow-y-auto">
+            <div class="flex flex-col p-6 pt-20 space-y-1">
+                <a href="/dashboard" class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">🏠 Dashboard</a>
+                <a href="/animals/add" class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">➕ Add Animal</a>
+                <a href="/ai-assistant" class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">🩺 AI Diagnosis</a>
+                <a href="/guide/medicine-guide" class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">💊 Medicine Guide</a>
+                <a href="/compliance" class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">✅ Biosecurity</a>
+                <a href="/marketplace" class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">🛒 Marketplace</a>
+                <a href="/list-product" class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">📦 List Product</a>
+                <a href="/my-products" class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">📦 My Products</a>
+                <a href="/orders/sales" class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">💰 Sales</a>
+                <a href="/community" class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">👥 Community</a>
+                <span class="text-emerald-800 font-semibold px-3 py-2 bg-emerald-50 rounded-full text-center mt-2">Hi, <%= user.name %></span>
+                <form action="/logout" method="POST"><button type="submit" class="w-full text-left text-red-600 hover:text-red-700 font-medium py-2.5">Logout</button></form>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="mb-6">
-            <a href="/dashboard" class="text-emerald-600 hover:text-emerald-700">← Back to Dashboard</a>
+    <!-- Hero banner -->
+    <header class="relative bg-gradient-to-br from-slate-950 via-emerald-950 to-emerald-900 overflow-hidden">
+        <div class="absolute inset-0 opacity-20 pointer-events-none">
+            <div class="particle" style="left: 12%; width: 8px; height: 8px; animation-duration: 14s; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 48%; width: 5px; height: 5px; animation-duration: 18s; animation-delay: 3s;"></div>
+            <div class="particle" style="left: 82%; width: 7px; height: 7px; animation-duration: 16s; animation-delay: 6s;"></div>
         </div>
-
-        <!-- Main Content with Better Visual Balance -->
-        <div class="max-w-6xl mx-auto">
-            <!-- Medical History Section (Center-aligned) -->
-            <div class="mb-8">
-                <div class="card max-w-4xl mx-auto">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">📋 Medical History</h3>
-
-                    <% if (medicalLogs.length===0) { %>
-                        <div class="text-center py-12 text-gray-500">
-                            <div class="text-5xl mb-3">💊</div>
-                            <p class="text-lg">No medical records yet</p>
-                            <p class="text-sm mt-2">Medical logs will appear here when you add treatments</p>
-                        </div>
-                        <% } else { %>
-                            <div class="space-y-4">
-                                <% medicalLogs.forEach(log=> { %>
-                                    <div
-                                        class="border-2 border-gray-200 rounded-lg p-5 hover:border-emerald-400 transition-all hover:shadow-md">
-                                        <div class="flex justify-between items-start mb-3">
-                                            <h4 class="font-bold text-gray-900 text-lg">
-                                                <%= log.medicineName %>
-                                            </h4>
-                                            <span class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                                                <%= new Date(log.administeredAt).toLocaleDateString() %>
-                                            </span>
-                                        </div>
-
-                                        <div class="grid grid-cols-2 gap-4 text-sm mb-3">
-                                            <% if (log.dosage) { %>
-                                                <div class="bg-blue-50 p-3 rounded-lg">
-                                                    <span class="text-gray-600 text-xs">Dosage:</span>
-                                                    <p class="font-semibold text-gray-900">
-                                                        <%= log.dosage %>
-                                                    </p>
-                                                </div>
-                                                <% } %>
-
-                                                    <div class="bg-yellow-50 p-3 rounded-lg">
-                                                        <span class="text-gray-600 text-xs">Withdrawal Period:</span>
-                                                        <p class="font-bold text-gray-900">
-                                                            <%= log.withdrawalDays %> days
-                                                        </p>
-                                                    </div>
-                                        </div>
-
-                                        <% if (log.notes) { %>
-                                            <p class="text-sm text-gray-700 bg-gray-50 p-3 rounded-lg italic">
-                                                <%= log.notes %>
-                                            </p>
-                                            <% } %>
-                                    </div>
-                                    <% }) %>
-                            </div>
-                            <% } %>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+            <a href="/dashboard" class="inline-flex items-center gap-2 text-emerald-300 hover:text-emerald-200 text-sm font-medium transition mb-6">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Back to Dashboard
+            </a>
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+                <div>
+                    <p class="label-caps text-emerald-400 mb-2">Animal Profile</p>
+                    <h1 class="display-title text-white flex items-center gap-3">
+                        <span class="text-4xl md:text-5xl">🐄</span>
+                        <%= animal.tagId %>
+                    </h1>
+                    <div class="flex flex-wrap items-center gap-2 mt-4">
+                        <span class="px-4 py-1.5 bg-white/10 border border-white/20 text-emerald-100 rounded-full text-sm font-semibold backdrop-blur-sm">
+                            <%= animal.species %>
+                        </span>
+                        <% if (animal.breed) { %>
+                            <span class="px-4 py-1.5 bg-white/10 border border-white/20 text-emerald-100 rounded-full text-sm font-semibold backdrop-blur-sm">
+                                <%= animal.breed %>
+                            </span>
+                        <% } %>
+                    </div>
+                </div>
+                <!-- Status Badge -->
+                <div class="animate-fade-in">
+                    <span class="text-base px-6 py-2.5
+                        <% if (animal.status === 'HEALTHY') { %>badge-biosafe<% } %>
+                        <% if (animal.status === 'WITHDRAWAL_LOCK') { %>badge-locked<% } %>
+                        <% if (animal.status === 'QUARANTINE') { %>badge-warning<% } %>">
+                        <%= animal.status %>
+                    </span>
                 </div>
             </div>
+        </div>
+    </header>
 
-            <!-- Animal Info Card (Offset to Right for Balance) -->
-            <div class="flex justify-end">
-                <div class="card max-w-md w-full shadow-xl border-2 border-emerald-200">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900">
-                            🐄 <%= animal.tagId %>
-                        </h2>
-                        <!-- Status Badge -->
-                        <span class="px-4 py-2 rounded-full text-sm font-semibold
-                            <% if (animal.status === 'HEALTHY') { %>bg-green-200 text-green-800<% } %>
-                            <% if (animal.status === 'WITHDRAWAL_LOCK') { %>bg-red-200 text-red-800<% } %>
-                            <% if (animal.status === 'QUARANTINE') { %>bg-yellow-200 text-yellow-800<% } %>">
-                            <%= animal.status %>
-                        </span>
-                    </div>
+    <!-- Tab navigation -->
+    <div class="bg-white border-b border-gray-200 sticky top-16 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex gap-6 md:gap-10 overflow-x-auto">
+                <button class="tab-btn tab-active" data-tab="tab-overview">Overview</button>
+                <button class="tab-btn" data-tab="tab-medical">Medical History</button>
+                <button class="tab-btn" data-tab="tab-compliance">Compliance</button>
+                <button class="tab-btn" data-tab="tab-products">Products</button>
+            </div>
+        </div>
+    </div>
 
-                    <!-- Info Grid -->
-                    <div class="space-y-4 text-sm mb-6">
-                        <div class="flex justify-between p-3 bg-gray-50 rounded-lg">
-                            <span class="text-gray-600">Species:</span>
-                            <span class="font-semibold">
-                                <%= animal.species %>
-                            </span>
-                        </div>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-                        <% if (animal.breed) { %>
-                            <div class="flex justify-between p-3 bg-gray-50 rounded-lg">
-                                <span class="text-gray-600">Breed:</span>
-                                <span class="font-semibold">
-                                    <%= animal.breed %>
+        <!-- ===================== OVERVIEW TAB ===================== -->
+        <section id="tab-overview">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Animal Info Card -->
+                <div class="lg:col-span-2 reveal">
+                    <div class="card-premium h-full">
+                        <h2 class="section-title text-2xl font-bold text-gray-900 mb-6">Animal Details</h2>
+                        <!-- Info Grid -->
+                        <div class="space-y-4 text-sm mb-6">
+                            <div class="flex justify-between items-center p-4 bg-emerald-50/60 rounded-xl border border-emerald-100">
+                                <span class="text-gray-600 inline-flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
+                                    Species:
+                                </span>
+                                <span class="font-semibold text-gray-900">
+                                    <%= animal.species %>
                                 </span>
                             </div>
+
+                            <% if (animal.breed) { %>
+                                <div class="flex justify-between items-center p-4 bg-emerald-50/60 rounded-xl border border-emerald-100">
+                                    <span class="text-gray-600 inline-flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+                                        Breed:
+                                    </span>
+                                    <span class="font-semibold text-gray-900">
+                                        <%= animal.breed %>
+                                    </span>
+                                </div>
                             <% } %>
 
-                                <% if (animal.geneticLineage) { %>
-                                    <div class="flex justify-between p-3 bg-gray-50 rounded-lg">
-                                        <span class="text-gray-600">Lineage:</span>
-                                        <span class="font-semibold">
-                                            <%= animal.geneticLineage %>
+                            <% if (animal.geneticLineage) { %>
+                                <div class="flex justify-between items-center p-4 bg-emerald-50/60 rounded-xl border border-emerald-100">
+                                    <span class="text-gray-600 inline-flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                        Lineage:
+                                    </span>
+                                    <span class="font-semibold text-gray-900">
+                                        <%= animal.geneticLineage %>
+                                    </span>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="reveal">
+                    <div class="card h-full">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
+                        <div class="space-y-3">
+                            <a href="/animals/<%= animal._id %>/add-medicine" class="block text-center btn-primary">
+                                ➕ Add Medical Log
+                            </a>
+                            <button onclick="deleteAnimal()" class="w-full btn-danger">
+                                🗑️ Delete Animal
+                            </button>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-4">Adding a medical log automatically recalculates the withdrawal period and compliance status for this animal.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== MEDICAL HISTORY TAB ===================== -->
+        <section id="tab-medical" class="hidden">
+            <div class="card reveal">
+                <h3 class="section-title text-2xl font-bold text-gray-900 mb-8">📋 Medical History</h3>
+
+                <% if (medicalLogs.length===0) { %>
+                    <div class="text-center py-16 text-gray-500">
+                        <div class="text-5xl mb-3 animate-float">💊</div>
+                        <p class="text-lg font-semibold text-gray-700">No medical records yet</p>
+                        <p class="text-sm mt-2">Medical logs will appear here when you add treatments</p>
+                    </div>
+                <% } else { %>
+                    <!-- Vertical timeline -->
+                    <div class="timeline-track relative">
+                        <!-- Emerald line -->
+                        <div class="absolute top-0 bottom-0 left-4 lg:left-1/2 w-0.5 bg-gradient-to-b from-emerald-600 via-emerald-400 to-emerald-200 lg:-translate-x-1/2"></div>
+                        <% medicalLogs.forEach(log=> { %>
+                            <div class="timeline-entry pl-12 lg:pl-0 pb-10 last:pb-0 reveal">
+                                <!-- Dot marker -->
+                                <span class="absolute top-6 left-4 lg:left-1/2 w-4 h-4 -translate-x-1/2 rounded-full bg-emerald-500 ring-4 ring-emerald-100 shadow-glow-emerald"></span>
+                                <div class="timeline-card card hover:border-emerald-400 transition-all hover:shadow-md">
+                                    <div class="flex justify-between items-start mb-3 gap-3">
+                                        <h4 class="font-bold text-gray-900 text-lg">
+                                            <%= log.medicineName %>
+                                        </h4>
+                                        <span class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full whitespace-nowrap">
+                                            <%= new Date(log.administeredAt).toLocaleDateString() %>
                                         </span>
                                     </div>
-                                    <% } %>
-                    </div>
 
-                    <!-- Health Score -->
-                    <div class="mb-6 p-4 bg-gradient-to-r from-blue-50 to-emerald-50 rounded-lg border border-blue-200">
-                        <div class="flex justify-between text-sm mb-3">
-                            <span class="text-gray-700 font-semibold">Health Score</span>
-                            <span class="font-bold text-xl">
-                                <%= animal.healthScore %>/100
-                            </span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-4">
-                            <div class="h-4 rounded-full transition-all
-                                <% if (animal.healthScore >= 70) { %>bg-health-good<% } else if (animal.healthScore >= 40) { %>bg-health-warning<% } else { %>bg-health-danger<% } %>"
-                                style="width: <%= animal.healthScore %>%">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm mb-3">
+                                        <% if (log.dosage) { %>
+                                            <div class="bg-blue-50 p-3 rounded-xl border border-blue-100">
+                                                <span class="label-caps text-blue-700">Dosage</span>
+                                                <p class="font-semibold text-gray-900 mt-1">
+                                                    <%= log.dosage %>
+                                                </p>
+                                            </div>
+                                        <% } %>
+
+                                        <div class="bg-amber-50 p-3 rounded-xl border border-amber-100">
+                                            <span class="label-caps text-amber-700">Withdrawal Period</span>
+                                            <p class="font-bold text-gray-900 mt-1">
+                                                <%= log.withdrawalDays %> days
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <% if (log.notes) { %>
+                                        <p class="text-sm text-gray-700 bg-gray-50 p-3 rounded-xl italic border border-gray-100">
+                                            <%= log.notes %>
+                                        </p>
+                                    <% } %>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                <% } %>
+            </div>
+        </section>
+
+        <!-- ===================== COMPLIANCE TAB ===================== -->
+        <section id="tab-compliance" class="hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Health Score ring -->
+                <div class="card reveal">
+                    <h3 class="section-title text-2xl font-bold text-gray-900 mb-6">Health Score</h3>
+                    <div class="flex flex-col items-center py-4">
+                        <div class="relative w-48 h-48">
+                            <svg class="w-48 h-48 -rotate-90" viewBox="0 0 120 120">
+                                <circle cx="60" cy="60" r="52" fill="none" stroke="#e5e7eb" stroke-width="12" pathLength="100"></circle>
+                                <circle cx="60" cy="60" r="52" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" pathLength="100"
+                                    class="transition-all
+                                    <% if (animal.healthScore >= 70) { %>text-health-good<% } else if (animal.healthScore >= 40) { %>text-health-warning<% } else { %>text-health-danger<% } %>"
+                                    stroke-dasharray="<%= animal.healthScore %> 100"></circle>
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <span class="font-extrabold text-4xl text-gray-900">
+                                    <%= animal.healthScore %>
+                                </span>
+                                <span class="text-sm text-gray-500 font-medium">/100</span>
                             </div>
                         </div>
+                        <p class="text-gray-600 text-sm mt-4 text-center">Overall wellness index derived from treatment history and withdrawal compliance.</p>
                     </div>
+                </div>
+
+                <!-- Withdrawal / compliance status -->
+                <div class="card reveal">
+                    <h3 class="section-title text-2xl font-bold text-gray-900 mb-6">Withdrawal Compliance</h3>
 
                     <!-- Withdrawal Warning -->
                     <% if (animal.status==='WITHDRAWAL_LOCK' && daysRemaining> 0) { %>
-                        <div class="mb-6 bg-red-100 border-2 border-red-400 text-red-700 px-4 py-3 rounded-lg">
-                            <strong class="flex items-center gap-2">
-                                <span class="text-2xl">🔒</span>
-                                Withdrawal Period
-                            </strong>
-                            <p class="text-sm mt-2">
-                                <%= daysRemaining %> day(s) remaining until safe for production
-                            </p>
-                        </div>
-                        <% } %>
-
-                            <!-- Actions -->
-                            <div class="space-y-3">
-                                <a href="/animals/<%= animal._id %>/add-medicine" class="block text-center btn-primary">
-                                    ➕ Add Medical Log
-                                </a>
-                                <button onclick="deleteAnimal()" class="w-full btn-danger">
-                                    🗑️ Delete Animal
-                                </button>
+                        <div class="mb-6 bg-red-50 border-2 border-red-300 rounded-2xl p-5">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="badge-locked">🔒 Withdrawal Period</span>
                             </div>
+                            <p class="text-4xl font-extrabold text-red-700">
+                                <%= daysRemaining %>
+                            </p>
+                            <p class="text-sm text-red-700 mt-1 font-medium">
+                                day(s) remaining until safe for production
+                            </p>
+                            <p class="text-xs text-red-500 mt-3">Products from this animal are locked from the marketplace until the withdrawal period completes.</p>
+                        </div>
+                    <% } %>
+
+                    <div class="p-4 bg-emerald-50/60 border border-emerald-100 rounded-2xl">
+                        <p class="label-caps text-emerald-700 mb-2">Current Status</p>
+                        <span class="
+                            <% if (animal.status === 'HEALTHY') { %>badge-biosafe<% } %>
+                            <% if (animal.status === 'WITHDRAWAL_LOCK') { %>badge-locked<% } %>
+                            <% if (animal.status === 'QUARANTINE') { %>badge-warning<% } %>">
+                            <%= animal.status %>
+                        </span>
+                        <p class="text-sm text-gray-600 mt-3">Compliance is enforced automatically: every medical log's withdrawal period must fully elapse before this animal's produce is marked bio-safe.</p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <!-- ===================== PRODUCTS TAB ===================== -->
+        <section id="tab-products" class="hidden">
+            <div class="card reveal text-center py-16">
+                <div class="text-5xl mb-4 animate-float">🧺</div>
+                <p class="text-lg font-semibold text-gray-700">No products listed from this animal yet</p>
+                <p class="text-sm text-gray-500 mt-2 max-w-md mx-auto">Once this animal is bio-safe, you can list its produce on the marketplace with automatic compliance verification.</p>
+                <div class="mt-6 flex flex-col sm:flex-row justify-center gap-3">
+                    <a href="/list-product" class="btn-primary inline-block">➕ List a Product</a>
+                    <a href="/my-products" class="btn-secondary inline-block">📦 My Products</a>
+                </div>
+            </div>
+        </section>
     </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <p class="text-xl font-extrabold text-white">🐄 JeevBandhu</p>
+                <p class="text-slate-400 text-sm mt-3">Bio-safe livestock health management for Indian farmers. Smart forecasting for healthy livestock. 🌱</p>
+            </div>
+            <div>
+                <p class="label-caps text-emerald-400 mb-3">Platform</p>
+                <ul class="space-y-2 text-sm text-slate-300">
+                    <li><a href="/dashboard" class="hover:text-emerald-400 transition">Dashboard</a></li>
+                    <li><a href="/marketplace" class="hover:text-emerald-400 transition">Marketplace</a></li>
+                    <li><a href="/community" class="hover:text-emerald-400 transition">Community</a></li>
+                </ul>
+            </div>
+            <div>
+                <p class="label-caps text-emerald-400 mb-3">Resources</p>
+                <ul class="space-y-2 text-sm text-slate-300">
+                    <li><a href="/guide/medicine-guide" class="hover:text-emerald-400 transition">Medicine Guide</a></li>
+                    <li><a href="/ai-assistant" class="hover:text-emerald-400 transition">AI Assistant</a></li>
+                    <li><a href="/compliance" class="hover:text-emerald-400 transition">Biosecurity</a></li>
+                </ul>
+            </div>
+            <div>
+                <p class="label-caps text-emerald-400 mb-3">Trust</p>
+                <p class="text-sm text-slate-300">Every product verified bio-safe with full withdrawal-period compliance.</p>
+            </div>
+        </div>
+        <div class="border-t border-white/10">
+            <p class="text-center text-slate-500 text-sm py-5">© 2024 JeevBandhu — Ensuring Bio-Safe Livestock Products</p>
+        </div>
+    </footer>
 
     <script>
         async function deleteAnimal() {
@@ -199,6 +407,38 @@
                 alert('Error deleting animal');
             }
         }
+    </script>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', (e) => { e.stopPropagation(); mobileMenu.classList.toggle('hidden'); mobileMenu.classList.toggle('active'); mobileMenuBtn.classList.toggle('active'); });
+            document.addEventListener('click', (e) => { if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) { mobileMenu.classList.add('hidden'); mobileMenu.classList.remove('active'); mobileMenuBtn.classList.remove('active'); } });
+        }
+
+        // Tabs
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabSections = ['tab-overview', 'tab-medical', 'tab-compliance', 'tab-products'].map(id => document.getElementById(id));
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabButtons.forEach(b => b.classList.remove('tab-active'));
+                btn.classList.add('tab-active');
+                tabSections.forEach(section => {
+                    if (section) section.classList.toggle('hidden', section.id !== btn.dataset.tab);
+                });
+                // Reveal any newly visible .reveal elements immediately
+                const active = document.getElementById(btn.dataset.tab);
+                if (active) active.querySelectorAll('.reveal').forEach(el => el.classList.add('revealed'));
+            });
+        });
+
+        // Scroll reveal
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); revealObserver.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
     </script>
 </body>
 

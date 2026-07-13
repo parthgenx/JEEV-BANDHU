@@ -5,22 +5,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disease Diagnosis - JeevBandhu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/output.css">
     <style>
+        /* Symptom chips (JS relies on .symptom-card + .selected + data-symptom) */
         .symptom-card {
-            transition: all 0.3s;
+            transition: all 0.25s ease;
             cursor: pointer;
-            border: 2px solid transparent;
+            border: 1.5px solid #e2e8f0;
+            background: #ffffff;
+            border-radius: 9999px;
+            padding: 0.45rem 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #334155;
+            user-select: none;
+            white-space: nowrap;
         }
 
         .symptom-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: #10b981;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
         }
 
         .symptom-card.selected {
             border-color: #10b981;
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            background: linear-gradient(135deg, #065f46 0%, #10b981 100%);
+            color: #ffffff;
+        }
+
+        .symptom-card.selected .chip-sub {
+            color: #d1fae5;
+        }
+
+        .chip-sub {
+            font-weight: 400;
+            color: #94a3b8;
+            font-size: 0.7rem;
         }
 
         .diagnosis-result {
@@ -57,218 +84,253 @@
                 transform: rotate(360deg);
             }
         }
+
+        /* Three bouncing emerald dots */
+        .typing-dots {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .typing-dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: dotBounce 1.2s infinite ease-in-out;
+        }
+
+        .typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes dotBounce {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+            30% { transform: translateY(-6px); opacity: 1; }
+        }
+
+        .ai-avatar {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, #065f46 0%, #10b981 100%);
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+        }
     </style>
 </head>
 
-<body class="bg-gray-50">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="/dashboard" class="text-2xl font-bold text-emerald-600">🐄 JeevBandhu</a>
-                <div class="flex items-center space-x-6">
-                    <a href="/dashboard" class="text-gray-700 hover:text-emerald-600 transition">Dashboard</a>
-                    <a href="/animals/add" class="text-gray-700 hover:text-emerald-600 transition">Add Animal</a>
-                    <a href="/guide/medicine-guide" class="text-gray-700 hover:text-emerald-600 transition">Medicine
-                        Guide</a>
-                    <a href="/list-product" class="text-gray-700 hover:text-emerald-600 transition">List Product</a>
-                    <a href="/my-products" class="text-gray-700 hover:text-emerald-600 transition">My Products</a>
-                    <a href="/orders/sales" class="text-gray-700 hover:text-emerald-600 transition">Sales</a>
-                    <a href="/marketplace" class="text-gray-700 hover:text-emerald-600 transition">Marketplace</a>
-                    <span class="text-gray-600">Hi, <%= user.name %></span>
-                    <form action="/logout" method="POST" class="inline">
-                        <button type="submit" class="text-red-600 hover:text-red-700 transition">Logout</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </nav>
+<body class="bg-slate-950 min-h-screen font-sans">
+    <div class="flex h-screen overflow-hidden">
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">🩺 AI Disease Diagnosis</h1>
-            <p class="text-gray-600 mt-2">Select the symptoms your cattle is showing to get an AI-powered diagnosis</p>
-        </div>
+        <!-- Sidebar overlay (mobile) -->
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black/60 z-30 hidden md:hidden"></div>
 
-        <!-- Instructions -->
-        <div class="card bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 mb-8">
-            <div class="flex items-start">
-                <div class="text-3xl mr-4">ℹ️</div>
-                <div>
-                    <h3 class="font-bold text-gray-900 mb-2">How it works:</h3>
-                    <ol class="text-sm text-gray-700 space-y-1">
-                        <li>1. Select one or more symptoms from the list below</li>
-                        <li>2. Click "Diagnose Disease" to get AI analysis</li>
-                        <li>3. View the diagnosis and recommended treatment</li>
-                        <li>4. Click "View Treatment" to see medicine guide</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-
-        <!-- Symptom Selection -->
-        <div class="card mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Select Symptoms</h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="symptomGrid">
-                <div class="symptom-card card bg-white" data-symptom="Loss of appetite">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">🍽️</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Loss of appetite</h3>
-                            <p class="text-sm text-gray-600">Not eating normally</p>
-                        </div>
+        <!-- Sidebar -->
+        <aside id="sidebar"
+            class="fixed md:static inset-y-0 left-0 z-40 w-72 bg-slate-950 border-r border-white/10 flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300">
+            <div class="p-5 border-b border-white/10">
+                <a href="/dashboard" class="flex items-center gap-3 group">
+                    <div class="ai-avatar" style="width:2.5rem;height:2.5rem;font-size:0.8rem;">AI</div>
+                    <div>
+                        <p class="text-white font-extrabold leading-tight">AI Assistant</p>
+                        <p class="text-emerald-400 text-xs font-medium">JeevBandhu Vet Diagnosis</p>
                     </div>
-                </div>
-
-                <div class="symptom-card card bg-white" data-symptom="Fever or high temperature">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">🌡️</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Fever</h3>
-                            <p class="text-sm text-gray-600">High temperature</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="symptom-card card bg-white" data-symptom="Coughing or respiratory issues">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">🫁</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Coughing</h3>
-                            <p class="text-sm text-gray-600">Respiratory problems</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="symptom-card card bg-white" data-symptom="Diarrhea or loose stool">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">💧</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Diarrhea</h3>
-                            <p class="text-sm text-gray-600">Loose stool</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="symptom-card card bg-white" data-symptom="Lethargy or weakness">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">😴</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Lethargy</h3>
-                            <p class="text-sm text-gray-600">Weak, not active</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="symptom-card card bg-white" data-symptom="Reduced milk production">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">🥛</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Low milk</h3>
-                            <p class="text-sm text-gray-600">Reduced production</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="symptom-card card bg-white" data-symptom="Lameness or difficulty walking">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">🦵</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Lameness</h3>
-                            <p class="text-sm text-gray-600">Difficulty walking</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="symptom-card card bg-white" data-symptom="Swelling or inflammation">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">🔴</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Swelling</h3>
-                            <p class="text-sm text-gray-600">Inflammation present</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="symptom-card card bg-white" data-symptom="Discharge from nose or eyes">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">👁️</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Discharge</h3>
-                            <p class="text-sm text-gray-600">Nasal or eye</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="symptom-card card bg-white" data-symptom="Weight loss">
-                    <div class="flex items-center">
-                        <div class="text-4xl mr-4">⚖️</div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Weight loss</h3>
-                            <p class="text-sm text-gray-600">Losing body mass</p>
-                        </div>
-                    </div>
-                </div>
+                </a>
             </div>
 
-            <div class="mt-6 flex justify-center">
-                <button id="diagnoseBtn" disabled
-                    class="px-8 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-all font-semibold shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
-                    <span class="text-2xl">🩺</span>
-                    <span>Diagnose Disease</span>
+            <div class="p-4">
+                <button id="sidebarNewChat"
+                    class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10 transition font-semibold text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    New Diagnosis
                 </button>
             </div>
 
-            <p id="selectedCount" class="text-center text-gray-600 mt-3 text-sm">Select at least one symptom</p>
-        </div>
+            <nav class="flex-1 overflow-y-auto px-4 pb-4 space-y-1">
+                <p class="label-caps text-slate-500 px-2 pt-2 pb-1 text-xs">Navigate</p>
+                <a href="/dashboard" class="side-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition text-sm font-medium">
+                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1V10" /></svg>
+                    Dashboard
+                </a>
+                <a href="/animals/add" class="side-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition text-sm font-medium">
+                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    Add Animal
+                </a>
+                <a href="/guide/medicine-guide" class="side-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition text-sm font-medium">
+                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                    Medicine Guide
+                </a>
+                <a href="/compliance" class="side-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition text-sm font-medium">
+                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                    Biosecurity
+                </a>
+                <p class="label-caps text-slate-500 px-2 pt-4 pb-1 text-xs">Commerce</p>
+                <a href="/marketplace" class="side-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition text-sm font-medium">
+                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                    Marketplace
+                </a>
+                <a href="/list-product" class="side-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition text-sm font-medium">
+                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                    List Product
+                </a>
+                <a href="/my-products" class="side-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition text-sm font-medium">
+                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                    My Products
+                </a>
+                <a href="/orders/sales" class="side-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition text-sm font-medium">
+                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    Sales
+                </a>
+            </nav>
 
-        <!-- Loading Indicator -->
-        <div id="loadingIndicator" class="hidden text-center py-12">
-            <div class="loading-spinner mx-auto mb-4"></div>
-            <p class="text-gray-700 font-semibold">Analyzing symptoms...</p>
-            <p class="text-gray-600 text-sm mt-2">Our AI is reviewing medical knowledge to diagnose the condition</p>
-        </div>
-
-        <!-- Diagnosis Result -->
-        <div id="diagnosisResult" class="hidden diagnosis-result">
-            <div class="card bg-gradient-to-br from-green-50 to-emerald-100 border-l-4 border-green-500">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">📋 Diagnosis Result</h2>
-
-                <div class="bg-white rounded-lg p-6 mb-6 shadow-sm">
-                    <div class="mb-6">
-                        <p class="text-sm text-gray-600 mb-2 font-semibold">Disease Identified:</p>
-                        <h3 id="diseaseName" class="text-3xl font-bold text-emerald-600"></h3>
-                    </div>
-
-                    <div class="border-t pt-6 mb-6">
-                        <p class="text-sm text-gray-600 mb-3 font-semibold">Explanation:</p>
-                        <p id="diseaseExplanation" class="text-gray-900 leading-relaxed"></p>
-                    </div>
-
-                    <div class="border-t pt-6">
-                        <p class="text-sm text-gray-600 mb-3 font-semibold">Recommended Treatment:</p>
-                        <p id="treatmentInfo" class="text-gray-900 font-semibold leading-relaxed"></p>
-                    </div>
+            <div class="p-4 border-t border-white/10 space-y-3">
+                <a href="/dashboard" class="flex items-center gap-2 text-slate-400 hover:text-emerald-400 transition text-sm font-medium">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                    Back to Dashboard
+                </a>
+                <div class="flex items-center justify-between">
+                    <span class="px-3 py-1.5 bg-emerald-500/10 text-emerald-300 rounded-full text-xs font-semibold">Hi, <%= user.name %></span>
+                    <form action="/logout" method="POST" class="inline">
+                        <button type="submit" class="text-red-400 hover:text-red-300 transition text-sm font-medium">Logout</button>
+                    </form>
                 </div>
+            </div>
+        </aside>
 
-                <div class="flex flex-col md:flex-row gap-4">
-                    <button id="viewTreatmentBtn"
-                        class="flex-1 px-8 py-5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition-all duration-300 font-bold text-xl shadow-xl hover:shadow-2xl transform hover:scale-105 flex items-center justify-center gap-3">
-                        <span class="text-3xl">💊</span>
-                        <span class="text-white">View Treatment in Medicine Guide</span>
-                        <span class="text-2xl">→</span>
-                    </button>
-                    <button id="newDiagnosisBtn"
-                        class="px-8 py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all duration-300 font-bold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 flex items-center justify-center gap-2 opacity-100"
-                        style="background-color: #2563eb !important;">
-                        <span class="text-2xl">🔄</span>
-                        <span class="text-white font-bold" style="color: white !important;">New Diagnosis</span>
-                    </button>
+        <!-- Main chat column -->
+        <div class="flex-1 flex flex-col min-w-0 bg-slate-50">
+
+            <!-- Slim glass top bar (mobile) -->
+            <header class="nav-glass md:hidden sticky top-0 z-20 flex items-center justify-between px-4 h-14 border-b border-emerald-100">
+                <button id="sidebarToggle" class="flex flex-col justify-center items-center w-10 h-10 hamburger" aria-label="Menu">
+                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
+                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
+                    <span class="block w-6 h-0.5 bg-gray-700"></span>
+                </button>
+                <span class="font-extrabold gradient-text">🩺 AI Diagnosis</span>
+                <a href="/dashboard" class="text-emerald-700 text-sm font-semibold">Dashboard</a>
+            </header>
+
+            <!-- Scrollable message list -->
+            <main id="chatScroll" class="flex-1 overflow-y-auto">
+                <div class="max-w-3xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+                    <!-- Welcome / instructions AI message -->
+                    <div class="flex items-start gap-3 animate-fade-in">
+                        <div class="ai-avatar">AI</div>
+                        <div class="chat-bubble-ai">
+                            <p class="font-bold mb-2">🩺 AI Disease Diagnosis</p>
+                            <p class="text-sm mb-3">Select the symptoms your cattle is showing to get an AI-powered diagnosis.</p>
+                            <p class="font-semibold text-sm mb-1">How it works:</p>
+                            <ol class="text-sm space-y-1 opacity-90">
+                                <li>1. Select one or more symptoms from the chips below</li>
+                                <li>2. Press send to get AI analysis</li>
+                                <li>3. View the diagnosis and recommended treatment</li>
+                                <li>4. Click "View Treatment" to see the medicine guide</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Loading indicator: bouncing dots -->
+                    <div id="loadingIndicator" class="hidden flex items-start gap-3">
+                        <div class="ai-avatar">AI</div>
+                        <div class="chat-bubble-ai">
+                            <div class="typing-dots mb-2"><span></span><span></span><span></span></div>
+                            <p class="font-semibold text-sm">Analyzing symptoms...</p>
+                            <p class="text-xs opacity-80 mt-1">Our AI is reviewing medical knowledge to diagnose the condition</p>
+                        </div>
+                    </div>
+
+                    <!-- Diagnosis result: user bubble + AI bubble -->
+                    <div id="diagnosisResult" class="hidden diagnosis-result space-y-6">
+                        <!-- User message: the symptoms sent -->
+                        <div class="flex justify-end">
+                            <div class="chat-bubble-user">
+                                <p class="text-xs font-semibold opacity-80 mb-1">Symptoms reported</p>
+                                <p id="userSymptomsBubble" class="text-sm"></p>
+                            </div>
+                        </div>
+
+                        <!-- AI diagnosis message -->
+                        <div class="flex items-start gap-3">
+                            <div class="ai-avatar">AI</div>
+                            <div class="chat-bubble-ai w-full max-w-full">
+                                <p class="text-xs font-semibold opacity-70 mb-1">📋 Disease Identified</p>
+                                <h3 id="diseaseName" class="text-2xl font-extrabold text-emerald-400 mb-4"></h3>
+
+                                <p class="text-xs font-semibold opacity-70 mb-1">Explanation</p>
+                                <p id="diseaseExplanation" class="text-sm leading-relaxed mb-4"></p>
+
+                                <p class="text-xs font-semibold opacity-70 mb-1">Recommended Treatment</p>
+                                <p id="treatmentInfo" class="text-sm font-semibold leading-relaxed mb-5"></p>
+
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <button id="viewTreatmentBtn"
+                                        class="btn-primary flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                                        <span>View Treatment in Medicine Guide</span>
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                                    </button>
+                                    <button id="newDiagnosisBtn"
+                                        class="btn-secondary inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                                        <span>New Diagnosis</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+
+            <!-- Sticky bottom composer -->
+            <div id="composer" class="sticky bottom-0 z-20 bg-white/85 backdrop-blur-md border-t border-emerald-100">
+                <div class="max-w-3xl mx-auto px-4 sm:px-6 py-3">
+
+                    <!-- Symptom suggestion chips (JS: .symptom-card + data-symptom + #symptomGrid) -->
+                    <div class="flex flex-wrap gap-2 mb-3 max-h-28 overflow-y-auto" id="symptomGrid">
+                        <div class="symptom-card" data-symptom="Loss of appetite">🍽️ Loss of appetite <span class="chip-sub">not eating</span></div>
+                        <div class="symptom-card" data-symptom="Fever or high temperature">🌡️ Fever <span class="chip-sub">high temp</span></div>
+                        <div class="symptom-card" data-symptom="Coughing or respiratory issues">🫁 Coughing <span class="chip-sub">respiratory</span></div>
+                        <div class="symptom-card" data-symptom="Diarrhea or loose stool">💧 Diarrhea <span class="chip-sub">loose stool</span></div>
+                        <div class="symptom-card" data-symptom="Lethargy or weakness">😴 Lethargy <span class="chip-sub">weakness</span></div>
+                        <div class="symptom-card" data-symptom="Reduced milk production">🥛 Low milk <span class="chip-sub">reduced yield</span></div>
+                        <div class="symptom-card" data-symptom="Lameness or difficulty walking">🦵 Lameness <span class="chip-sub">walking issue</span></div>
+                        <div class="symptom-card" data-symptom="Swelling or inflammation">🔴 Swelling <span class="chip-sub">inflammation</span></div>
+                        <div class="symptom-card" data-symptom="Discharge from nose or eyes">👁️ Discharge <span class="chip-sub">nose / eyes</span></div>
+                        <div class="symptom-card" data-symptom="Weight loss">⚖️ Weight loss <span class="chip-sub">body mass</span></div>
+                    </div>
+
+                    <!-- Pill input + send button -->
+                    <div class="flex items-center gap-2">
+                        <div class="flex-1 min-w-0">
+                            <input id="symptomInputDisplay" type="text" readonly
+                                placeholder="Tap symptom chips above, then send for diagnosis..."
+                                class="w-full rounded-full border border-slate-200 bg-slate-50 px-5 py-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400 cursor-default truncate">
+                        </div>
+                        <button id="diagnoseBtn" disabled aria-label="Diagnose Disease"
+                            class="w-12 h-12 flex-shrink-0 rounded-full bg-brand-gradient text-white flex items-center justify-center shadow-glow-emerald hover:scale-105 transition-transform disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100">
+                            <svg class="w-5 h-5 translate-x-[1px]" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <p id="selectedCount" class="text-center text-gray-500 mt-2 text-xs">Select at least one symptom</p>
+                    <p class="text-center text-slate-400 text-[11px] mt-1">AI-generated guidance — always confirm with a qualified veterinarian before treatment.</p>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
 
     <script>
         const symptomCards = document.querySelectorAll('.symptom-card');
@@ -282,6 +344,9 @@
         const treatmentInfo = document.getElementById('treatmentInfo');
         const viewTreatmentBtn = document.getElementById('viewTreatmentBtn');
         const newDiagnosisBtn = document.getElementById('newDiagnosisBtn');
+        const symptomInputDisplay = document.getElementById('symptomInputDisplay');
+        const userSymptomsBubble = document.getElementById('userSymptomsBubble');
+        const chatScroll = document.getElementById('chatScroll');
 
         let selectedSymptoms = [];
         let currentDiagnosis = null;
@@ -317,21 +382,57 @@
             if (selectedSymptoms.length > 0) {
                 diagnoseBtn.disabled = false;
                 selectedCount.textContent = `${selectedSymptoms.length} symptom(s) selected`;
+                symptomInputDisplay.value = selectedSymptoms.join(', ');
             } else {
                 diagnoseBtn.disabled = true;
                 selectedCount.textContent = 'Select at least one symptom';
+                symptomInputDisplay.value = '';
             }
+        }
+
+        // Typewriter effect (~15ms/char) with .typing-caret; click bubble text to complete instantly
+        function typeText(el, text, done) {
+            const fullText = text || '';
+            el.textContent = '';
+            el.classList.add('typing-caret');
+            let i = 0;
+            let finished = false;
+
+            const finish = () => {
+                if (finished) return;
+                finished = true;
+                clearInterval(timer);
+                el.textContent = fullText;
+                el.classList.remove('typing-caret');
+                el.removeEventListener('click', finish);
+                if (done) done();
+            };
+
+            el.addEventListener('click', finish);
+
+            const timer = setInterval(() => {
+                i++;
+                el.textContent = fullText.slice(0, i);
+                if (i >= fullText.length) finish();
+            }, 15);
+
+            // Cap the effect for very long responses
+            setTimeout(finish, 12000);
         }
 
         // Diagnose button
         diagnoseBtn.addEventListener('click', async () => {
             if (selectedSymptoms.length === 0) return;
 
+            // Show user message bubble with the symptoms being sent
+            userSymptomsBubble.textContent = selectedSymptoms.join(', ');
+
             // Show loading
             loadingIndicator.classList.remove('hidden');
             diagnosisResult.classList.add('hidden');
             document.getElementById('symptomGrid').parentElement.style.opacity = '0.5';
             diagnoseBtn.disabled = true;
+            chatScroll.scrollTo({ top: chatScroll.scrollHeight, behavior: 'smooth' });
 
             try {
                 const response = await fetch('/api/ai/diagnose', {
@@ -357,13 +458,20 @@
         });
 
         function showDiagnosis(diagnosis) {
-            diseaseName.textContent = diagnosis.disease;
-            diseaseExplanation.textContent = diagnosis.explanation;
-            treatmentInfo.textContent = diagnosis.treatment;
-
             // Confidence badge removed per user request
-
             diagnosisResult.classList.remove('hidden');
+            chatScroll.scrollTo({ top: chatScroll.scrollHeight, behavior: 'smooth' });
+
+            // Progressive typewriter reveal — same data, same targets
+            diseaseExplanation.textContent = '';
+            treatmentInfo.textContent = '';
+            typeText(diseaseName, diagnosis.disease, () => {
+                typeText(diseaseExplanation, diagnosis.explanation, () => {
+                    typeText(treatmentInfo, diagnosis.treatment, () => {
+                        chatScroll.scrollTo({ top: chatScroll.scrollHeight, behavior: 'smooth' });
+                    });
+                });
+            });
         }
 
         // View treatment button
@@ -383,7 +491,33 @@
             diagnosisResult.classList.add('hidden');
             updateUI();
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            chatScroll.scrollTo({ top: 0, behavior: 'smooth' });
         });
+
+        // Sidebar "New Diagnosis" mirrors the reset action
+        const sidebarNewChat = document.getElementById('sidebarNewChat');
+        if (sidebarNewChat) {
+            sidebarNewChat.addEventListener('click', () => newDiagnosisBtn.click());
+        }
+
+        // Mobile sidebar drawer
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        if (sidebarToggle && sidebar && sidebarOverlay) {
+            const closeSidebar = () => {
+                sidebar.classList.add('-translate-x-full');
+                sidebarOverlay.classList.add('hidden');
+                sidebarToggle.classList.remove('active');
+            };
+            sidebarToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                sidebar.classList.toggle('-translate-x-full');
+                sidebarOverlay.classList.toggle('hidden');
+                sidebarToggle.classList.toggle('active');
+            });
+            sidebarOverlay.addEventListener('click', closeSidebar);
+        }
     </script>
 </body>
 

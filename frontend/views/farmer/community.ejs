@@ -5,315 +5,349 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Community - JeevBandhu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/output.css">
-    <style>
-        /* Dropdown menu styles - reusable for all dropdowns */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: white;
-            min-width: 200px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            z-index: 100;
-            top: 100%;
-            left: 0;
-            margin-top: 0px;
-            /* Remove gap */
-            padding-top: 8px;
-            /* Add internal padding instead */
-        }
-
-        .dropdown-content a {
-            color: #374151;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            transition: background-color 0.2s;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #f3f4f6;
-            color: #059669;
-        }
-
-        .dropdown-content a:first-child {
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-        }
-
-        .dropdown-content a:last-child {
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .dropdown-trigger {
-            cursor: pointer;
-            user-select: none;
-        }
-
-        /* Ensure dropdown stays visible when hovering over content */
-        .dropdown-content:hover {
-            display: block;
-        }
-    </style>
 </head>
 
-<body class="bg-gray-50">
-    <!-- Enhanced Navigation with Organized Dropdowns -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
+<body class="bg-surface-light min-h-screen font-sans">
+    <!-- Canonical farmer top nav -->
+    <nav class="nav-glass sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <a href="/dashboard" class="text-2xl font-bold text-emerald-600">🐄 JeevBandhu</a>
-                <div class="flex items-center space-x-6">
-                    <a href="/dashboard" class="text-gray-700 hover:text-emerald-600 transition">🏠 Dashboard</a>
-
-                    <!-- Farm Management Dropdown -->
-                    <div class="dropdown">
-                        <span class="dropdown-trigger text-gray-700 hover:text-emerald-600 transition">🌾 Farm ▾</span>
-                        <div class="dropdown-content">
-                            <a href="/animals/add">➕ Add Animal</a>
-                            <a href="/dashboard">📊 My Animals</a>
-
-                            <a href="/ai-assistant">🩺 AI Diagnosis</a>
-                            <a href="/guide/medicine-guide">💊 Medicine Guide</a>
-                            <a href="/compliance">✅ Biosecurity</a>
+                <a href="/dashboard" class="flex items-center gap-2 text-xl font-extrabold gradient-text">
+                    <span class="text-2xl">🐄</span> JeevBandhu
+                </a>
+                <div class="hidden lg:flex items-center gap-6">
+                    <a href="/dashboard" class="nav-link">Dashboard</a>
+                    <div class="relative group">
+                        <button class="nav-link inline-flex items-center gap-1">Farm
+                            <svg class="w-3.5 h-3.5 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="w-56 bg-white rounded-2xl shadow-xl border border-emerald-100 py-2 overflow-hidden">
+                                <a href="/animals/add" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">➕ Add Animal</a>
+                                <a href="/dashboard" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">📊 My Animals</a>
+                                <a href="/ai-assistant" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">🩺 AI Diagnosis</a>
+                                <a href="/guide/medicine-guide" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">💊 Medicine Guide</a>
+                                <a href="/compliance" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">✅ Biosecurity</a>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- Commerce Dropdown -->
-                    <div class="dropdown">
-                        <span class="dropdown-trigger text-gray-700 hover:text-emerald-600 transition">💼 Commerce
-                            ▾</span>
-                        <div class="dropdown-content">
-                            <a href="/marketplace">🛒 Browse Marketplace</a>
-                            <a href="/list-product">➕ List Product</a>
-                            <a href="/my-products">📦 My Products</a>
-                            <a href="/orders/sales">💰 Sales</a>
+                    <div class="relative group">
+                        <button class="nav-link inline-flex items-center gap-1">Commerce
+                            <svg class="w-3.5 h-3.5 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="w-56 bg-white rounded-2xl shadow-xl border border-emerald-100 py-2 overflow-hidden">
+                                <a href="/marketplace" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">🛒 Browse Marketplace</a>
+                                <a href="/list-product" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">➕ List Product</a>
+                                <a href="/my-products" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">📦 My Products</a>
+                                <a href="/orders/sales" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">💰 Sales</a>
+                            </div>
                         </div>
                     </div>
-
-                    <a href="/community" class="text-emerald-600 font-semibold">👥 Community</a>
-                    <span class="text-gray-600">Hi, <%= user.name %></span>
+                    <a href="/community" class="nav-link active">Community</a>
+                    <span class="px-3 py-1.5 bg-emerald-50 text-emerald-800 rounded-full text-sm font-semibold">Hi, <%= user.name %></span>
                     <form action="/logout" method="POST" class="inline">
-                        <button type="submit" class="text-red-600 hover:text-red-700 transition">Logout</button>
+                        <button type="submit" class="text-red-600 hover:text-red-700 font-medium transition">Logout</button>
                     </form>
                 </div>
+                <!-- Mobile hamburger -->
+                <button id="mobileMenuBtn" class="lg:hidden flex flex-col justify-center items-center w-10 h-10 hamburger z-50 relative" aria-label="Menu">
+                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
+                    <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
+                    <span class="block w-6 h-0.5 bg-gray-700"></span>
+                </button>
+            </div>
+        </div>
+        <div id="mobileMenu" class="mobile-menu hidden fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-40 lg:hidden overflow-y-auto">
+            <div class="flex flex-col p-6 pt-20 space-y-1">
+                <a href="/dashboard" class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">🏠 Dashboard</a>
+                <a href="/animals/add" class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">➕ Add Animal</a>
+                <a href="/ai-assistant" class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">🩺 AI Diagnosis</a>
+                <a href="/guide/medicine-guide" class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">💊 Medicine Guide</a>
+                <a href="/compliance" class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">✅ Biosecurity</a>
+                <a href="/marketplace" class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">🛒 Marketplace</a>
+                <a href="/list-product" class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">📦 List Product</a>
+                <a href="/my-products" class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">📦 My Products</a>
+                <a href="/orders/sales" class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">💰 Sales</a>
+                <a href="/community" class="text-emerald-700 font-semibold py-2.5 border-b border-gray-100">👥 Community</a>
+                <span class="text-emerald-800 font-semibold px-3 py-2 bg-emerald-50 rounded-full text-center mt-2">Hi, <%= user.name %></span>
+                <form action="/logout" method="POST"><button type="submit" class="w-full text-left text-red-600 hover:text-red-700 font-medium py-2.5">Logout</button></form>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Header with New Post Button -->
-        <div class="flex justify-between items-center mb-8">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900">Farmer Community Forum</h1>
-                <p class="text-gray-600 mt-1">Connect, share, and learn with fellow farmers</p>
-            </div>
-            <button onclick="openNewPostModal()"
-                class="px-8 py-4 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition font-bold text-lg shadow-lg flex items-center gap-2">
-                ➕ New Post
-            </button>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <!-- Page header -->
+        <div class="mb-8 reveal">
+            <h1 class="section-title text-3xl font-extrabold text-gray-900">Community</h1>
+            <p class="text-gray-600 mt-3">Connect, share, and learn with fellow farmers across India.</p>
         </div>
 
-        <!-- Search and Category Filters -->
-        <div class="card mb-8">
-            <div class="flex flex-col md:flex-row gap-4 items-center">
-                <!-- Search Bar -->
-                <div class="flex-1 w-full">
-                    <input type="text" id="searchInput" placeholder="🔍 Search posts..." value="<%= searchQuery %>"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500">
-                </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            <!-- Main feed column -->
+            <div class="lg:col-span-2 max-w-2xl w-full">
 
-                <!-- Category Filters -->
-                <div class="flex gap-2 flex-wrap justify-end">
-                    <a href="/community?category=All"
-                        class="px-4 py-2 rounded-lg text-sm font-semibold transition <%= currentCategory === 'All' ? 'bg-emerald-600 text-white shadow-md' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' %>">
-                        All
-                    </a>
-                    <a href="/community?category=Disease"
-                        class="px-4 py-2 rounded-lg text-sm font-semibold transition <%= currentCategory === 'Disease' ? 'bg-emerald-600 text-white shadow-md' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' %>">
-                        Disease
-                    </a>
-                    <a href="/community?category=Feed"
-                        class="px-4 py-2 rounded-lg text-sm font-semibold transition <%= currentCategory === 'Feed' ? 'bg-emerald-600 text-white shadow-md' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' %>">
-                        Feed
-                    </a>
-                    <a href="/community?category=Breeding"
-                        class="px-4 py-2 rounded-lg text-sm font-semibold transition <%= currentCategory === 'Breeding' ? 'bg-emerald-600 text-white shadow-md' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' %>">
-                        Breeding
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Posts Feed -->
-        <div id="postsFeed">
-            <% if (posts.length===0) { %>
-                <div class="card text-center py-12">
-                    <div class="text-6xl mb-4">💬</div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">No posts yet</h3>
-                    <p class="text-gray-600">Be the first to share something with the community!</p>
-                </div>
-                <% } else { %>
-                    <% posts.forEach(post=> { %>
-                        <div class="card mb-6 hover:shadow-lg transition-shadow">
-                            <!-- Post Header -->
-                            <div class="flex justify-between items-start mb-3">
-                                <h2 class="text-2xl font-bold text-gray-900">
-                                    <%= post.title || 'Untitled Post' %>
-                                </h2>
-                                <% if (post.authorId.toString()===user.id) { %>
-                                    <button onclick="deletePost('<%= post._id %>')"
-                                        class="text-red-600 hover:text-red-700 text-sm font-semibold">
-                                        🗑️ Delete
+                <!-- Create-post composer -->
+                <div id="newPostModal" class="card-premium mb-6 reveal">
+                    <form id="newPostForm">
+                        <div class="flex items-start gap-4">
+                            <div class="w-11 h-11 shrink-0 rounded-full bg-brand-gradient text-white flex items-center justify-center font-bold text-lg shadow-glow-emerald">
+                                <%= (user.name || '?').trim().charAt(0).toUpperCase() %>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <input type="text" id="postTitle" class="input-field w-full mb-3"
+                                    placeholder="e.g., My piglets have diarrhea - what should I do?">
+                                <textarea id="postContent" rows="3" class="input-field w-full resize-none"
+                                    placeholder="Describe your question or share your experience..."></textarea>
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mt-3">
+                                    <select id="postCategory" class="input-field py-2 text-sm w-full sm:w-auto">
+                                        <option value="General">General</option>
+                                        <option value="Disease">Disease</option>
+                                        <option value="Feed">Feed</option>
+                                        <option value="Breeding">Breeding</option>
+                                    </select>
+                                    <button type="submit" class="btn-primary inline-flex items-center justify-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                                        Post
                                     </button>
-                                    <% } %>
-                            </div>
-
-                            <!-- Post Content -->
-                            <p class="text-gray-800 mb-4 whitespace-pre-wrap">
-                                <%= post.content %>
-                            </p>
-
-                            <!-- Post Meta -->
-                            <div
-                                class="flex items-center justify-between text-sm text-gray-600 mb-4 pb-4 border-b border-gray-200">
-                                <div class="flex items-center gap-4">
-                                    <span class="font-semibold text-gray-900">
-                                        <%= post.authorName %>
-                                    </span>
-                                    <span>•</span>
-                                    <span>
-                                        <%= new Date(post.createdAt).toLocaleDateString('en-IN', { day: '2-digit' ,
-                                            month: '2-digit' , year: 'numeric' }) %>
-                                    </span>
-                                    <span>•</span>
-                                    <span
-                                        class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-xs font-semibold">
-                                        <%= post.category %>
-                                    </span>
-                                </div>
-                            </div>
-
-                            <!-- Like and Reply Actions -->
-                            <div class="flex items-center gap-6">
-                                <button onclick="toggleLike('<%= post._id %>')"
-                                    class="flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition">
-                                    <span class="text-xl">👍</span>
-                                    <span id="like-count-<%= post._id %>">
-                                        <%= post.likeCount || 0 %>
-                                    </span>
-                                </button>
-                                <button onclick="showReplies('<%= post._id %>')"
-                                    class="flex items-center gap-2 text-gray-600 hover:text-blue  -600 transition">
-                                    <span class="text-xl">💬</span>
-                                    <span id="reply-count-<%= post._id %>">
-                                        <%= post.replyCount || 0 %> replies
-                                    </span>
-                                </button>
-                            </div>
-
-                            <!-- Replies Section (Hidden by default) -->
-                            <div id="replies-<%= post._id %>" class="hidden mt-4 pt-4 border-t border-gray-200">
-                                <h4 class="font-semibold text-gray-900 mb-3">Replies</h4>
-
-                                <!-- Reply Form -->
-                                <div class="mb-4">
-                                    <textarea id="reply-input-<%= post._id %>" rows="2"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500"
-                                        placeholder="Write a reply..."></textarea>
-                                    <button onclick="addReply('<%= post._id %>')"
-                                        class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm font-semibold">
-                                        Post Reply
-                                    </button>
-                                </div>
-
-                                <!-- Existing Replies -->
-                                <div id="reply-list-<%= post._id %>">
-                                    <% if (post.replies && post.replies.length> 0) { %>
-                                        <% post.replies.forEach(reply=> { %>
-                                            <div class="bg-gray-50 p-3 rounded-lg mb-2">
-                                                <div class="flex items-center gap-2 mb-1">
-                                                    <span class="font-semibold text-sm text-gray-900">
-                                                        <%= reply.authorName %>
-                                                    </span>
-                                                    <span class="text-xs text-gray-500">
-                                                        <%= new Date(reply.createdAt).toLocaleDateString('en-IN') %>
-                                                    </span>
-                                                </div>
-                                                <p class="text-sm text-gray-700">
-                                                    <%= reply.content %>
-                                                </p>
-                                            </div>
-                                            <% }) %>
-                                                <% } %>
                                 </div>
                             </div>
                         </div>
-                        <% }) %>
-                            <% } %>
+                    </form>
+                </div>
+
+                <!-- Search and category filters -->
+                <div class="card mb-6 reveal">
+                    <div class="flex flex-col gap-4">
+                        <div class="relative">
+                            <svg class="w-5 h-5 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                            <input type="text" id="searchInput" placeholder="Search posts..." value="<%= searchQuery %>"
+                                class="input-field w-full pl-11">
+                        </div>
+                        <div class="flex gap-2 flex-wrap">
+                            <a href="/community?category=All"
+                                class="px-4 py-2 rounded-full text-sm font-semibold transition <%= currentCategory === 'All' ? 'bg-brand-gradient text-white shadow-glow-emerald' : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100' %>">
+                                All
+                            </a>
+                            <a href="/community?category=Disease"
+                                class="px-4 py-2 rounded-full text-sm font-semibold transition <%= currentCategory === 'Disease' ? 'bg-brand-gradient text-white shadow-glow-emerald' : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100' %>">
+                                Disease
+                            </a>
+                            <a href="/community?category=Feed"
+                                class="px-4 py-2 rounded-full text-sm font-semibold transition <%= currentCategory === 'Feed' ? 'bg-brand-gradient text-white shadow-glow-emerald' : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100' %>">
+                                Feed
+                            </a>
+                            <a href="/community?category=Breeding"
+                                class="px-4 py-2 rounded-full text-sm font-semibold transition <%= currentCategory === 'Breeding' ? 'bg-brand-gradient text-white shadow-glow-emerald' : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100' %>">
+                                Breeding
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Posts feed -->
+                <div id="postsFeed">
+                    <% if (posts.length===0) { %>
+                        <div class="card text-center py-14 reveal">
+                            <svg class="w-14 h-14 mx-auto text-emerald-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">No posts yet</h3>
+                            <p class="text-gray-600">Be the first to share something with the community!</p>
+                        </div>
+                        <% } else { %>
+                            <% posts.forEach(post=> { %>
+                                <div class="card mb-6 reveal hover:shadow-lg transition-shadow">
+                                    <!-- Post header: avatar + author + meta -->
+                                    <div class="flex items-start gap-3 mb-4">
+                                        <div class="w-11 h-11 shrink-0 rounded-full bg-gradient-to-br from-emerald-500 to-teal-700 text-white flex items-center justify-center font-bold text-lg">
+                                            <%= (post.authorName || '?').trim().charAt(0).toUpperCase() %>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center gap-2 flex-wrap">
+                                                <span class="font-semibold text-gray-900">
+                                                    <%= post.authorName %>
+                                                </span>
+                                                <span class="text-gray-400">•</span>
+                                                <span class="text-sm text-gray-500">
+                                                    <%= new Date(post.createdAt).toLocaleDateString('en-IN', { day: '2-digit' ,
+                                                        month: '2-digit' , year: 'numeric' }) %>
+                                                </span>
+                                            </div>
+                                            <span class="inline-block mt-1 px-2.5 py-0.5 bg-emerald-100 text-emerald-700 rounded-full text-xs font-semibold">
+                                                <%= post.category %>
+                                            </span>
+                                        </div>
+                                        <% if (post.authorId.toString()===user.id) { %>
+                                            <button onclick="deletePost('<%= post._id %>')"
+                                                class="shrink-0 inline-flex items-center gap-1 text-red-600 hover:text-red-700 text-sm font-semibold transition">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                                Delete
+                                            </button>
+                                            <% } %>
+                                    </div>
+
+                                    <!-- Post title + content -->
+                                    <h2 class="text-xl font-bold text-gray-900 mb-2">
+                                        <%= post.title || 'Untitled Post' %>
+                                    </h2>
+                                    <p class="text-gray-800 mb-4 whitespace-pre-wrap">
+                                        <%= post.content %>
+                                    </p>
+
+                                    <div class="border-t border-gray-100 pt-3">
+                                        <!-- Like and reply actions -->
+                                        <div class="flex items-center gap-6">
+                                            <button onclick="toggleLike('<%= post._id %>')"
+                                                class="flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition font-medium">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg>
+                                                <span id="like-count-<%= post._id %>">
+                                                    <%= post.likeCount || 0 %>
+                                                </span>
+                                            </button>
+                                            <button onclick="showReplies('<%= post._id %>')"
+                                                class="flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition font-medium">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                                                <span id="reply-count-<%= post._id %>">
+                                                    <%= post.replyCount || 0 %> replies
+                                                </span>
+                                            </button>
+                                        </div>
+
+                                        <!-- Replies section (hidden by default) -->
+                                        <div id="replies-<%= post._id %>" class="hidden mt-4 pt-4 border-t border-gray-100">
+                                            <h4 class="font-semibold text-gray-900 mb-3">Replies</h4>
+
+                                            <!-- Reply form -->
+                                            <div class="mb-4 pl-4 border-l-2 border-emerald-200">
+                                                <textarea id="reply-input-<%= post._id %>" rows="2"
+                                                    class="input-field w-full resize-none"
+                                                    placeholder="Write a reply..."></textarea>
+                                                <button onclick="addReply('<%= post._id %>')"
+                                                    class="btn-primary mt-2 text-sm px-4 py-2">
+                                                    Post Reply
+                                                </button>
+                                            </div>
+
+                                            <!-- Existing replies -->
+                                            <div id="reply-list-<%= post._id %>" class="pl-4 space-y-2">
+                                                <% if (post.replies && post.replies.length> 0) { %>
+                                                    <% post.replies.forEach(reply=> { %>
+                                                        <div class="bg-emerald-50 p-3 rounded-xl">
+                                                            <div class="flex items-center gap-2 mb-1">
+                                                                <span class="w-6 h-6 shrink-0 rounded-full bg-gradient-to-br from-emerald-500 to-teal-700 text-white flex items-center justify-center text-xs font-bold">
+                                                                    <%= (reply.authorName || '?').trim().charAt(0).toUpperCase() %>
+                                                                </span>
+                                                                <span class="font-semibold text-sm text-gray-900">
+                                                                    <%= reply.authorName %>
+                                                                </span>
+                                                                <span class="text-xs text-gray-500">
+                                                                    <%= new Date(reply.createdAt).toLocaleDateString('en-IN') %>
+                                                                </span>
+                                                            </div>
+                                                            <p class="text-sm text-gray-700">
+                                                                <%= reply.content %>
+                                                            </p>
+                                                        </div>
+                                                        <% }) %>
+                                                            <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }) %>
+                                    <% } %>
+                </div>
+            </div>
+
+            <!-- Right sidebar (hidden on mobile) -->
+            <aside class="hidden lg:block space-y-6">
+                <div class="card reveal">
+                    <p class="label-caps text-emerald-700 mb-4">Top Contributors</p>
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-3">
+                            <span class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-500 to-teal-700 text-white flex items-center justify-center font-bold text-sm">R</span>
+                            <div class="min-w-0">
+                                <p class="text-sm font-semibold text-gray-900">Ramesh Patil</p>
+                                <p class="text-xs text-gray-500">Dairy farming, Maharashtra</p>
+                            </div>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 text-white flex items-center justify-center font-bold text-sm">S</span>
+                            <div class="min-w-0">
+                                <p class="text-sm font-semibold text-gray-900">Sunita Devi</p>
+                                <p class="text-xs text-gray-500">Poultry care, Bihar</p>
+                            </div>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="w-9 h-9 rounded-full bg-gradient-to-br from-sky-500 to-indigo-600 text-white flex items-center justify-center font-bold text-sm">K</span>
+                            <div class="min-w-0">
+                                <p class="text-sm font-semibold text-gray-900">Karthik Reddy</p>
+                                <p class="text-xs text-gray-500">Goat rearing, Telangana</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card reveal">
+                    <p class="label-caps text-emerald-700 mb-4">Trending Topics</p>
+                    <div class="flex flex-wrap gap-2">
+                        <a href="/community?category=Disease" class="px-3 py-1.5 bg-emerald-50 text-emerald-800 rounded-full text-xs font-semibold hover:bg-emerald-100 transition">#DiseasePrevention</a>
+                        <a href="/community?category=Feed" class="px-3 py-1.5 bg-emerald-50 text-emerald-800 rounded-full text-xs font-semibold hover:bg-emerald-100 transition">#MonsoonFeed</a>
+                        <a href="/community?category=Breeding" class="px-3 py-1.5 bg-emerald-50 text-emerald-800 rounded-full text-xs font-semibold hover:bg-emerald-100 transition">#Breeding</a>
+                        <a href="/community?category=All" class="px-3 py-1.5 bg-emerald-50 text-emerald-800 rounded-full text-xs font-semibold hover:bg-emerald-100 transition">#BioSecurity</a>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-4">Join the conversation — ask a question or share what worked on your farm.</p>
+                </div>
+            </aside>
         </div>
     </main>
 
-    <!-- New Post Modal -->
-    <div id="newPostModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-        <div class="bg-white rounded-xl p-8 max-w-2xl w-full mx-4">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">Create New Post</h2>
-            <form id="newPostForm">
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
-                    <input type="text" id="postTitle"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500"
-                        placeholder="e.g., My piglets have diarrhea - what should I do?">
-                </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                    <select id="postCategory"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500">
-                        <option value="General">General</option>
-                        <option value="Disease">Disease</option>
-                        <option value="Feed">Feed</option>
-                        <option value="Breeding">Breeding</option>
-                    </select>
-                </div>
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Content</label>
-                    <textarea id="postContent" rows="6"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500"
-                        placeholder="Describe your question or share your experience..."></textarea>
-                </div>
-                <div class="flex justify-end gap-4">
-                    <button type="button" onclick="closeNewPostModal()"
-                        class="px-8 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-semibold text-base">
-                        Cancel
-                    </button>
-                    <button type="submit"
-                        class="px-8 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition font-semibold text-base">
-                        Post to Community
-                    </button>
-                </div>
-            </form>
+    <!-- Canonical footer -->
+    <footer class="bg-slate-950 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <p class="text-xl font-extrabold text-white">🐄 JeevBandhu</p>
+                <p class="text-slate-400 text-sm mt-3">Bio-safe livestock health management for Indian farmers. Smart forecasting for healthy livestock. 🌱</p>
+            </div>
+            <div>
+                <p class="label-caps text-emerald-400 mb-3">Platform</p>
+                <ul class="space-y-2 text-sm text-slate-300">
+                    <li><a href="/dashboard" class="hover:text-emerald-400 transition">Dashboard</a></li>
+                    <li><a href="/marketplace" class="hover:text-emerald-400 transition">Marketplace</a></li>
+                    <li><a href="/community" class="hover:text-emerald-400 transition">Community</a></li>
+                </ul>
+            </div>
+            <div>
+                <p class="label-caps text-emerald-400 mb-3">Resources</p>
+                <ul class="space-y-2 text-sm text-slate-300">
+                    <li><a href="/guide/medicine-guide" class="hover:text-emerald-400 transition">Medicine Guide</a></li>
+                    <li><a href="/ai-assistant" class="hover:text-emerald-400 transition">AI Assistant</a></li>
+                    <li><a href="/compliance" class="hover:text-emerald-400 transition">Biosecurity</a></li>
+                </ul>
+            </div>
+            <div>
+                <p class="label-caps text-emerald-400 mb-3">Trust</p>
+                <p class="text-sm text-slate-300">Every product verified bio-safe with full withdrawal-period compliance.</p>
+            </div>
         </div>
-    </div>
+        <div class="border-t border-white/10">
+            <p class="text-center text-slate-500 text-sm py-5">© 2024 JeevBandhu — Ensuring Bio-Safe Livestock Products</p>
+        </div>
+    </footer>
 
     <script>
-        // New Post Modal
+        // Composer helpers (composer is now inline; these keep older entry points working)
         function openNewPostModal() {
-            document.getElementById('newPostModal').classList.remove('hidden');
+            const composer = document.getElementById('newPostModal');
+            composer.classList.remove('hidden');
+            composer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            document.getElementById('postContent').focus();
         }
 
         function closeNewPostModal() {
-            document.getElementById('newPostModal').classList.add('hidden');
             document.getElementById('newPostForm').reset();
         }
 
@@ -348,6 +382,13 @@
             } catch (error) {
                 alert('❌ Failed to create post. Please try again.');
             }
+        });
+
+        // Auto-grow the composer textarea
+        const composerTextarea = document.getElementById('postContent');
+        composerTextarea.addEventListener('input', () => {
+            composerTextarea.style.height = 'auto';
+            composerTextarea.style.height = composerTextarea.scrollHeight + 'px';
         });
 
         // Toggle like on post
@@ -441,6 +482,20 @@
                 window.location.href = `/community?search=${encodeURIComponent(search)}`;
             }, 500);
         });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', (e) => { e.stopPropagation(); mobileMenu.classList.toggle('hidden'); mobileMenu.classList.toggle('active'); mobileMenuBtn.classList.toggle('active'); });
+            document.addEventListener('click', (e) => { if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) { mobileMenu.classList.add('hidden'); mobileMenu.classList.remove('active'); mobileMenuBtn.classList.remove('active'); } });
+        }
+
+        // Scroll reveal
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); revealObserver.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
     </script>
 </body>
 

@@ -16,62 +16,55 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 
-<body class="bg-gray-50 min-h-screen" style="font-family: 'Plus Jakarta Sans', sans-serif;">
-  <!-- Subtle Background Pattern -->
-  <div class="fixed inset-0 -z-10 opacity-30">
+<body class="bg-surface-light min-h-screen font-sans">
+  <!-- Scroll progress bar -->
+  <div id="scroll-progress"></div>
+
+  <!-- Subtle emerald dot-grid background -->
+  <div class="fixed inset-0 -z-10 opacity-20 pointer-events-none">
     <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-          <circle cx="20" cy="20" r="1.5" fill="#064e3b" opacity="0.4" />
+        <pattern id="dot-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <circle cx="20" cy="20" r="1.5" fill="#10b981" opacity="0.35" />
         </pattern>
       </defs>
-      <rect width="100%" height="100%" fill="url(#grid)" />
+      <rect width="100%" height="100%" fill="url(#dot-grid)" />
     </svg>
   </div>
-  <!-- Navigation -->
+
   <!-- Glassmorphism Navigation -->
   <nav class="nav-glass sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
-        <div class="flex items-center">
-          <a href="/" class="text-2xl font-extrabold gradient-text hover:scale-105 transition-transform duration-300">🐄
-            JeevBandhu</a>
-        </div>
+        <a href="/" class="flex items-center gap-2 text-xl font-extrabold gradient-text hover:scale-105 transition-transform duration-300">
+          <span class="text-2xl">🐄</span> JeevBandhu
+        </a>
 
         <!-- Desktop Navigation -->
-        <div class="hidden md:flex items-center space-x-4">
+        <div class="hidden md:flex items-center gap-6">
           <% if (user) { %>
             <% if (user.role==='farmer' ) { %>
-              <a href="/dashboard"
-                class="text-gray-700 hover:text-emerald-600 font-medium transition-all duration-200 hover:scale-105">Dashboard</a>
-              <a href="/animals/add"
-                class="text-gray-700 hover:text-emerald-600 font-medium transition-all duration-200 hover:scale-105">Add
-                Animal</a>
-              <a href="/list-product"
-                class="text-gray-700 hover:text-emerald-600 font-medium transition-all duration-200 hover:scale-105">List
-                Product</a>
-              <a href="/my-products"
-                class="text-gray-700 hover:text-emerald-600 font-medium transition-all duration-200 hover:scale-105">My
-                Products</a>
+              <a href="/dashboard" class="nav-link">Dashboard</a>
+              <a href="/animals/add" class="nav-link">Add Animal</a>
+              <a href="/list-product" class="nav-link">List Product</a>
+              <a href="/my-products" class="nav-link">My Products</a>
               <% } %>
-                <a href="/marketplace"
-                  class="text-gray-700 hover:text-emerald-600 font-medium transition-all duration-200 hover:scale-105">Marketplace</a>
-                <span class="text-gray-700 font-semibold px-3 py-1 bg-soft-sage rounded-full">Hi, <%= user.name
+                <a href="/marketplace" class="nav-link">Marketplace</a>
+                <span class="px-3 py-1.5 bg-emerald-50 text-emerald-800 rounded-full text-sm font-semibold">Hi, <%= user.name
                     || 'User' %></span>
                 <form action="/logout" method="POST" class="inline">
                   <button type="submit"
-                    class="text-red-600 hover:text-red-700 font-medium transition-all duration-200 hover:scale-105">Logout</button>
+                    class="text-red-600 hover:text-red-700 font-medium transition">Logout</button>
                 </form>
                 <% } else { %>
-                  <a href="/login"
-                    class="text-gray-700 hover:text-emerald-600 font-medium transition-all duration-200 hover:scale-105">Login</a>
+                  <a href="/login" class="nav-link">Login</a>
                   <a href="/register" class="btn-primary">Get Started</a>
                   <% } %>
         </div>
 
         <!-- Mobile Hamburger Button -->
         <button id="mobileMenuBtn"
-          class="md:hidden flex flex-col justify-center items-center w-10 h-10 hamburger z-50 relative">
+          class="md:hidden flex flex-col justify-center items-center w-10 h-10 hamburger z-50 relative" aria-label="Menu">
           <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
           <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
           <span class="block w-6 h-0.5 bg-gray-700"></span>
@@ -80,55 +73,82 @@
     </div>
 
     <!-- Mobile Menu Overlay -->
-    <div id="mobileMenu" class="mobile-menu hidden fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-40 md:hidden">
-      <div class="flex flex-col p-6 pt-20 space-y-4">
+    <div id="mobileMenu" class="mobile-menu hidden fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-40 md:hidden overflow-y-auto">
+      <div class="flex flex-col p-6 pt-20 space-y-1">
         <% if (user) { %>
           <% if (user.role==='farmer' ) { %>
             <a href="/dashboard"
-              class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">Dashboard</a>
+              class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">Dashboard</a>
             <a href="/animals/add"
-              class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">Add Animal</a>
+              class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">Add Animal</a>
             <a href="/list-product"
-              class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">List Product</a>
+              class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">List Product</a>
             <a href="/my-products"
-              class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">My Products</a>
+              class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">My Products</a>
             <% } %>
               <a href="/marketplace"
-                class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">Marketplace</a>
-              <span class="text-gray-700 font-semibold px-3 py-2 bg-soft-sage rounded-full text-center">Hi, <%=
+                class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">Marketplace</a>
+              <span class="text-emerald-800 font-semibold px-3 py-2 bg-emerald-50 rounded-full text-center mt-2">Hi, <%=
                   user.name || 'User' %></span>
               <form action="/logout" method="POST" class="inline">
                 <button type="submit"
-                  class="w-full text-left text-red-600 hover:text-red-700 font-medium py-2">Logout</button>
+                  class="w-full text-left text-red-600 hover:text-red-700 font-medium py-2.5">Logout</button>
               </form>
               <% } else { %>
                 <a href="/login"
-                  class="text-gray-700 hover:text-emerald-600 font-medium py-2 border-b border-gray-200">Login</a>
-                <a href="/register" class="btn-primary text-center">Get Started</a>
+                  class="text-gray-700 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-100">Login</a>
+                <a href="/register" class="btn-primary text-center mt-2">Get Started</a>
                 <% } %>
       </div>
     </div>
   </nav>
 
   <!-- Main Content -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in">
     <%- body %>
   </main>
 
   <!-- Footer -->
-  <!-- Premium Footer -->
-  <footer class="bg-gradient-to-br from-deep-emerald to-emerald-900 mt-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <p class="text-center text-emerald-100 text-sm font-medium">
-        © 2024 JeevBandhu - Ensuring Bio-Safe Livestock Products
-      </p>
-      <p class="text-center text-emerald-300 text-xs mt-2">
-        Smart Forecasting for Healthy Livestock 🌱
-      </p>
+  <footer class="bg-slate-950 mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div>
+        <p class="text-xl font-extrabold text-white">🐄 JeevBandhu</p>
+        <p class="text-slate-400 text-sm mt-3">Bio-safe livestock health management for Indian farmers. Smart forecasting for healthy livestock. 🌱</p>
+      </div>
+      <div>
+        <p class="label-caps text-emerald-400 mb-3">Platform</p>
+        <ul class="space-y-2 text-sm text-slate-300">
+          <li><a href="/dashboard" class="hover:text-emerald-400 transition">Dashboard</a></li>
+          <li><a href="/marketplace" class="hover:text-emerald-400 transition">Marketplace</a></li>
+          <li><a href="/community" class="hover:text-emerald-400 transition">Community</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="label-caps text-emerald-400 mb-3">Resources</p>
+        <ul class="space-y-2 text-sm text-slate-300">
+          <li><a href="/guide/medicine-guide" class="hover:text-emerald-400 transition">Medicine Guide</a></li>
+          <li><a href="/ai-assistant" class="hover:text-emerald-400 transition">AI Assistant</a></li>
+          <li><a href="/compliance" class="hover:text-emerald-400 transition">Biosecurity</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="label-caps text-emerald-400 mb-3">Trust</p>
+        <p class="text-sm text-slate-300">Every product verified bio-safe with full withdrawal-period compliance.</p>
+      </div>
+    </div>
+    <div class="border-t border-white/10">
+      <p class="text-center text-slate-500 text-sm py-5">© 2024 JeevBandhu — Ensuring Bio-Safe Livestock Products</p>
     </div>
   </footer>
 
-  <!-- Mobile Menu JavaScript -->
+  <!-- Scroll to top button -->
+  <button id="scroll-top-btn" class="btn-primary fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full flex items-center justify-center p-0 shadow-glow-emerald" aria-label="Scroll to top">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" />
+    </svg>
+  </button>
+
+  <!-- Layout JavaScript -->
   <script>
     // Mobile menu toggle
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -159,6 +179,27 @@
           mobileMenu.classList.remove('active');
           mobileMenuBtn.classList.remove('active');
         });
+      });
+    }
+
+    // Scroll progress bar + scroll-to-top visibility
+    const scrollProgress = document.getElementById('scroll-progress');
+    const scrollTopBtn = document.getElementById('scroll-top-btn');
+
+    window.addEventListener('scroll', function () {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollProgress) {
+        scrollProgress.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
+      }
+      if (scrollTopBtn) {
+        scrollTopBtn.classList.toggle('visible', scrollTop > 300);
+      }
+    }, { passive: true });
+
+    if (scrollTopBtn) {
+      scrollTopBtn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     }
   </script>

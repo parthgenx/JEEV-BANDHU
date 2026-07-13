@@ -5,404 +5,420 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - JeevBandhu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/output.css">
-    <style>
-        /* Dropdown menu styles */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: white;
-            min-width: 200px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            z-index: 100;
-            top: 100%;
-            left: 0;
-            margin-top: 0px;
-            /* Remove gap */
-            padding-top: 8px;
-            /* Add internal padding instead */
-        }
-
-        .dropdown-content a {
-            color: #374151;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            transition: background-color 0.2s;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #f3f4f6;
-            color: #059669;
-        }
-
-        .dropdown-content a:first-child {
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-        }
-
-        .dropdown-content a:last-child {
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .dropdown-trigger {
-            cursor: pointer;
-            user-select: none;
-        }
-
-        /* Ensure dropdown stays visible when hovering over content */
-        .dropdown-content:hover {
-            display: block;
-        }
-    </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 
-<body class="bg-gray-50">
-    <!-- Navigation with Organized Dropdowns -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="/dashboard" class="text-2xl font-bold text-emerald-600">🐄 JeevBandhu</a>
-                <div class="flex items-center space-x-6">
-                    <a href="/dashboard" class="text-emerald-600 font-semibold">🏠 Dashboard</a>
+<body class="bg-surface-light min-h-screen font-sans">
 
-                    <!-- Farm Management Dropdown -->
-                    <div class="dropdown">
-                        <span class="dropdown-trigger text-gray-700 hover:text-emerald-600 transition">🌾 Farm ▾</span>
-                        <div class="dropdown-content">
-                            <a href="/animals/add">➕ Add Animal</a>
-                            <a href="/dashboard">📊 My Animals</a>
+    <!-- Mobile top bar -->
+    <header class="lg:hidden sticky top-0 z-40 nav-glass">
+        <div class="flex items-center justify-between h-16 px-4">
+            <a href="/dashboard" class="flex items-center gap-2 text-lg font-extrabold gradient-text">
+                <span class="text-2xl">🐄</span> JeevBandhu
+            </a>
+            <button id="sidebarToggle" class="flex flex-col justify-center items-center w-10 h-10 hamburger" aria-label="Menu">
+                <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
+                <span class="block w-6 h-0.5 bg-gray-700 mb-1"></span>
+                <span class="block w-6 h-0.5 bg-gray-700"></span>
+            </button>
+        </div>
+    </header>
 
-                            <a href="/ai-assistant">🩺 AI Diagnosis</a>
-                            <a href="/guide/medicine-guide">💊 Medicine Guide</a>
-                            <a href="/compliance">✅ Biosecurity</a>
-                        </div>
-                    </div>
+    <!-- Sidebar backdrop (mobile) -->
+    <div id="sidebarBackdrop" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"></div>
 
-                    <!-- Commerce Dropdown -->
-                    <div class="dropdown">
-                        <span class="dropdown-trigger text-gray-700 hover:text-emerald-600 transition">💼 Commerce
-                            ▾</span>
-                        <div class="dropdown-content">
-                            <a href="/marketplace">🛒 Browse Marketplace</a>
-                            <a href="/list-product">➕ List Product</a>
-                            <a href="/my-products">📦 My Products</a>
-                            <a href="/orders/sales">💰 Sales</a>
-                        </div>
-                    </div>
+    <!-- Sidebar -->
+    <aside id="sidebar"
+        class="fixed top-0 left-0 h-full w-64 bg-slate-950 z-50 flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+        <a href="/dashboard" class="flex items-center gap-2.5 px-6 h-16 shrink-0 border-b border-white/10">
+            <span class="text-2xl">🐄</span>
+            <span class="text-lg font-extrabold text-white tracking-tight">JeevBandhu</span>
+        </a>
 
-                    <a href="/community" class="text-gray-700 hover:text-emerald-600 transition">👥 Community</a>
-                    <span class="text-gray-600">Hi, <%= user.name %></span>
-                    <form action="/logout" method="POST" class="inline">
-                        <button type="submit" class="text-red-600 hover:text-red-700 transition">Logout</button>
-                    </form>
+        <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+            <a href="/dashboard" class="side-link active">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1V10"/></svg>
+                Dashboard
+            </a>
+            <a href="/animals/add" class="side-link">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                Add Animal
+            </a>
+            <a href="/ai-assistant" class="side-link">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 12.75l6 6 9-13.5"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M14.25 3.104v5.714a2.25 2.25 0 00.659 1.591L19 14.5"/></svg>
+                AI Diagnosis
+            </a>
+            <a href="/guide/medicine-guide" class="side-link">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                Medicine Guide
+            </a>
+            <a href="/compliance" class="side-link">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                Biosecurity
+            </a>
+
+            <p class="label-caps text-emerald-500/70 px-3 pt-5 pb-1">Commerce</p>
+            <a href="/marketplace" class="side-link">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                Marketplace
+            </a>
+            <a href="/list-product" class="side-link">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                List Product
+            </a>
+            <a href="/my-products" class="side-link">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                My Products
+            </a>
+            <a href="/orders/sales" class="side-link">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Sales
+            </a>
+
+            <p class="label-caps text-emerald-500/70 px-3 pt-5 pb-1">Network</p>
+            <a href="/community" class="side-link">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4zm6-4a3 3 0 11-3-3m-12 3a3 3 0 103-3"/></svg>
+                Community
+            </a>
+        </nav>
+
+        <div class="shrink-0 border-t border-white/10 p-4">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 rounded-full bg-brand-gradient flex items-center justify-center text-white font-bold shrink-0">
+                    <%= user.name.charAt(0).toUpperCase() %>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-white truncate"><%= user.name %></p>
+                    <p class="text-xs text-emerald-400">Farmer</p>
                 </div>
             </div>
+            <form action="/logout" method="POST">
+                <button type="submit"
+                    class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-red-400 border border-red-400/30 hover:bg-red-500/10 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                    Logout
+                </button>
+            </form>
         </div>
-    </nav>
+    </aside>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">My Herd Dashboard</h1>
-            <p class="text-gray-600 mt-2">Manage your livestock and monitor health status</p>
-        </div>
+    <!-- Main area -->
+    <div class="lg:ml-64">
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        <!-- Stats Overview -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="card bg-gradient-to-br from-green-50 to-emerald-100">
-                <h3 class="text-sm font-medium text-gray-600">Total Animals</h3>
-                <p class="text-3xl font-bold text-gray-900 mt-2">
-                    <%= stats.total %>
-                </p>
-            </div>
-
-            <div class="card bg-gradient-to-br from-emerald-50 to-green-100">
-                <h3 class="text-sm font-medium text-gray-600">Healthy</h3>
-                <p class="text-3xl font-bold text-health-good mt-2">
-                    <%= stats.healthy %>
-                </p>
-            </div>
-
-            <div class="card bg-gradient-to-br from-red-50 to-pink-100">
-                <h3 class="text-sm font-medium text-gray-600">Withdrawal Lock</h3>
-                <p class="text-3xl font-bold text-health-danger mt-2">
-                    <%= stats.locked %>
-                </p>
-            </div>
-
-            <div class="card bg-gradient-to-br from-blue-50 to-indigo-100">
-                <h3 class="text-sm font-medium text-gray-600">Avg Health Score</h3>
-                <p class="text-3xl font-bold text-gray-900 mt-2">
-                    <%= stats.avgHealthScore %>
-                </p>
-            </div>
-        </div>
-
-        <!-- Health Score Reasoning -->
-        <div class="card mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200">
-            <div class="flex items-start justify-between mb-6">
+            <!-- Top bar: greeting + date + bell -->
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 animate-fade-in">
                 <div>
-                    <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
-                        📊 Health Score Breakdown
-                    </h2>
-                    <p class="text-sm text-gray-600 mt-2">Understanding your herd's health score calculation</p>
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900">
+                        <span id="greetingTime">Good day</span>, <%= user.name %> 🌱
+                    </h1>
+                    <p id="currentDate" class="text-gray-500 mt-1 text-sm md:text-base">Manage your livestock and monitor health status</p>
                 </div>
-                <div class="text-right">
-                    <div class="text-4xl font-bold text-blue-600">
-                        <%= stats.avgHealthScore %>
-                    </div>
-                    <p class="text-xs text-gray-600">Average Score</p>
-                </div>
-            </div>
-
-            <!-- Toggle Button -->
-            <div class="mb-4">
-                <button onclick="toggleHealthInfo()"
-                    class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-md">
-                    <span id="healthInfoIcon">ℹ️</span>
-                    <span id="healthInfoText">How is health calculated?</span>
+                <button type="button" aria-label="Notifications"
+                    class="self-start sm:self-auto relative w-11 h-11 rounded-xl bg-white border border-emerald-100 shadow-sm flex items-center justify-center text-gray-500 hover:text-emerald-600 hover:shadow-md transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                    <span class="absolute top-2 right-2.5 w-2 h-2 rounded-full bg-health-danger animate-pulse"></span>
                 </button>
             </div>
 
-            <!-- Collapsible Details Panel -->
-            <div id="healthInfoPanel" class="hidden">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    <!-- Medical History Factor -->
-                    <div class="bg-white p-5 rounded-lg border border-blue-200 shadow-sm">
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="text-2xl">💊</span>
-                            <h3 class="font-semibold text-gray-900">Medical History</h3>
-                        </div>
-                        <p class="text-sm text-gray-600 mb-3">Recent treatments and interventions</p>
-                        <div class="flex items-center gap-2">
-                            <div class="flex-1 bg-gray-200 rounded-full h-2">
-                                <div class="bg-green-500 h-2 rounded-full" style="width: 85%"></div>
-                            </div>
-                            <span class="text-xs font-semibold">85%</span>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-3">Fewer recent treatments = better score</p>
-                    </div>
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+                <div class="stat-card border-t-4 border-emerald-500 animate-slide-up">
+                    <span class="stat-watermark">
+                        <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                    </span>
+                    <p class="label-caps text-slate-400">Total Animals</p>
+                    <p class="stat-number countup mt-2"><%= stats.total %></p>
+                </div>
 
-                    <!-- Withdrawal Compliance Factor -->
-                    <div class="bg-white p-5 rounded-lg border border-blue-200 shadow-sm">
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="text-2xl">⏰</span>
-                            <h3 class="font-semibold text-gray-900">Withdrawal Status</h3>
-                        </div>
-                        <p class="text-sm text-gray-600 mb-3">Medicine withdrawal period tracking</p>
-                        <div class="flex items-center gap-2">
-                            <div class="flex-1 bg-gray-200 rounded-full h-2">
-                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 70%"></div>
-                            </div>
-                            <span class="text-xs font-semibold">70%</span>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-3">No locked animals = optimal score</p>
-                    </div>
+                <div class="stat-card border-t-4 border-green-500 animate-slide-up" style="animation-delay: 80ms">
+                    <span class="stat-watermark">
+                        <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </span>
+                    <p class="label-caps text-slate-400">Healthy</p>
+                    <p class="stat-number countup mt-2"><%= stats.healthy %></p>
+                </div>
 
-                    <!-- Biosecurity Compliance Factor -->
-                    <div class="bg-white p-5 rounded-lg border border-blue-200 shadow-sm">
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="text-2xl">🛡️</span>
-                            <h3 class="font-semibold text-gray-900">Biosecurity</h3>
+                <div class="stat-card border-t-4 border-red-500 animate-slide-up" style="animation-delay: 160ms">
+                    <span class="stat-watermark">
+                        <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    </span>
+                    <p class="label-caps text-slate-400">Withdrawal Lock</p>
+                    <p class="stat-number countup mt-2"><%= stats.locked %></p>
+                </div>
+
+                <div class="stat-card border-t-4 border-gold-500 animate-slide-up" style="animation-delay: 240ms">
+                    <span class="stat-watermark">
+                        <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                    </span>
+                    <p class="label-caps text-slate-400">Avg Health Score</p>
+                    <p class="stat-number countup mt-2"><%= stats.avgHealthScore %></p>
+                </div>
+            </div>
+
+            <!-- Health Score Breakdown -->
+            <div class="card-premium mb-8">
+                <div class="flex items-start justify-between gap-4 mb-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                            Health Score Breakdown
+                        </h2>
+                        <p class="text-sm text-gray-500 mt-2">Understanding your herd's health score calculation</p>
+                    </div>
+                    <div class="text-right shrink-0">
+                        <div class="text-4xl font-extrabold gradient-text">
+                            <%= stats.avgHealthScore %>
                         </div>
-                        <p class="text-sm text-gray-600 mb-3">Safety and compliance measures</p>
-                        <div class="flex items-center gap-2">
-                            <div class="flex-1 bg-gray-200 rounded-full h-2">
-                                <div class="bg-blue-500 h-2 rounded-full" style="width: <%= stats.biosecurityScore %>%">
+                        <p class="text-xs text-gray-500">Average Score</p>
+                    </div>
+                </div>
+
+                <!-- Toggle Button -->
+                <div class="mb-4">
+                    <button onclick="toggleHealthInfo()" class="btn-ghost inline-flex items-center gap-2 text-sm">
+                        <span id="healthInfoIcon">ℹ️</span>
+                        <span id="healthInfoText">How is health calculated?</span>
+                    </button>
+                </div>
+
+                <!-- Collapsible Details Panel -->
+                <div id="healthInfoPanel" class="hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+                        <!-- Medical History Factor -->
+                        <div class="bg-white p-5 rounded-2xl border border-emerald-100 shadow-sm hover:shadow-md transition">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center text-lg">💊</span>
+                                <h3 class="font-semibold text-gray-900">Medical History</h3>
+                            </div>
+                            <p class="text-sm text-gray-500 mb-3">Recent treatments and interventions</p>
+                            <div class="flex items-center gap-2">
+                                <div class="flex-1 bg-gray-100 rounded-full h-2">
+                                    <div class="bg-brand-gradient h-2 rounded-full" style="width: 85%"></div>
                                 </div>
+                                <span class="text-xs font-semibold text-emerald-700">85%</span>
                             </div>
-                            <span class="text-xs font-semibold">
-                                <%= stats.biosecurityScore %>%
-                            </span>
+                            <p class="text-xs text-gray-400 mt-3">Fewer recent treatments = better score</p>
                         </div>
-                        <p class="text-xs text-gray-500 mt-3">
-                            <a href="/compliance" class="text-blue-600 hover:underline">View compliance tracker</a>
+
+                        <!-- Withdrawal Compliance Factor -->
+                        <div class="bg-white p-5 rounded-2xl border border-emerald-100 shadow-sm hover:shadow-md transition">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center text-lg">⏰</span>
+                                <h3 class="font-semibold text-gray-900">Withdrawal Status</h3>
+                            </div>
+                            <p class="text-sm text-gray-500 mb-3">Medicine withdrawal period tracking</p>
+                            <div class="flex items-center gap-2">
+                                <div class="flex-1 bg-gray-100 rounded-full h-2">
+                                    <div class="bg-gold-500 h-2 rounded-full" style="width: 70%"></div>
+                                </div>
+                                <span class="text-xs font-semibold text-amber-700">70%</span>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-3">No locked animals = optimal score</p>
+                        </div>
+
+                        <!-- Biosecurity Compliance Factor -->
+                        <div class="bg-white p-5 rounded-2xl border border-emerald-100 shadow-sm hover:shadow-md transition">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center text-lg">🛡️</span>
+                                <h3 class="font-semibold text-gray-900">Biosecurity</h3>
+                            </div>
+                            <p class="text-sm text-gray-500 mb-3">Safety and compliance measures</p>
+                            <div class="flex items-center gap-2">
+                                <div class="flex-1 bg-gray-100 rounded-full h-2">
+                                    <div class="bg-brand-gradient h-2 rounded-full" style="width: <%= stats.biosecurityScore %>%">
+                                    </div>
+                                </div>
+                                <span class="text-xs font-semibold text-emerald-700">
+                                    <%= stats.biosecurityScore %>%
+                                </span>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-3">
+                                <a href="/compliance" class="text-emerald-600 font-medium hover:underline">View compliance tracker</a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200">
+                        <p class="text-sm text-gray-700">
+                            <span class="font-semibold">💡 Tip:</span> Maintain high biosecurity compliance and keep animals
+                            healthy to improve your overall health score.
                         </p>
                     </div>
                 </div>
-
-                <div class="bg-blue-100 p-4 rounded-lg border border-blue-300">
-                    <p class="text-sm text-gray-700">
-                        <span class="font-semibold">💡 Tip:</span> Maintain high biosecurity compliance and keep animals
-                        healthy to improve your overall health score.
-                    </p>
-                </div>
             </div>
-        </div>
 
-        <script>
-            function toggleHealthInfo() {
-                const panel = document.getElementById('healthInfoPanel');
-                const icon = document.getElementById('healthInfoIcon');
-                const text = document.getElementById('healthInfoText');
+            <script>
+                function toggleHealthInfo() {
+                    const panel = document.getElementById('healthInfoPanel');
+                    const icon = document.getElementById('healthInfoIcon');
+                    const text = document.getElementById('healthInfoText');
 
-                if (panel.classList.contains('hidden')) {
-                    panel.classList.remove('hidden');
-                    icon.textContent = '▼';
-                    text.textContent = 'Hide calculation details';
-                } else {
-                    panel.classList.add('hidden');
-                    icon.textContent = 'ℹ️';
-                    text.textContent = 'How is health calculated?';
+                    if (panel.classList.contains('hidden')) {
+                        panel.classList.remove('hidden');
+                        icon.textContent = '▼';
+                        text.textContent = 'Hide calculation details';
+                    } else {
+                        panel.classList.add('hidden');
+                        icon.textContent = 'ℹ️';
+                        text.textContent = 'How is health calculated?';
+                    }
                 }
-            }
-        </script>
+            </script>
 
 
-        <% if (animals.length===0) { %>
-            <div class="text-center py-16">
-                <div class="text-6xl mb-4">🐄</div>
-                <h2 class="text-2xl font-bold text-gray-900 mb-2">No animals yet</h2>
-                <p class="text-gray-600 mb-6">Start by adding your first animal to the system</p>
-                <a href="/animals/add" class="btn-primary">Add First Animal</a>
-            </div>
-            <% } else { %>
-                <!-- Herd Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <% animals.forEach(animal=> { %>
-                        <div class="card border-4 
-            <%= animal.status === 'HEALTHY' ? 'status-healthy' : '' %>
-            <%= animal.status === 'WITHDRAWAL_LOCK' ? 'status-locked' : '' %>
-            <%= animal.status === 'QUARANTINE' ? 'status-quarantine' : '' %>">
-
-                            <!-- Animal Header -->
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <h3 class="text-xl font-bold text-gray-900">
-                                        <%= animal.tagId %>
-                                    </h3>
-                                    <p class="text-sm text-gray-600">
-                                        <%= animal.species %>
-                                            <% if (animal.breed) { %> - <%= animal.breed %>
-                                                    <% } %>
-                                    </p>
-                                </div>
-
-                                <!-- Status Badge with Icon -->
-                                <div class="flex items-center gap-2">
-                                    <% if (animal.status==='HEALTHY' ) { %>
-                                        <span class="text-2xl">✅</span>
-                                        <% } else if (animal.status==='WITHDRAWAL_LOCK' ) { %>
-                                            <span class="text-2xl">🔒</span>
-                                            <% } else if (animal.status==='QUARANTINE' ) { %>
-                                                <span class="text-2xl">⚠️</span>
-                                                <% } %>
-                                                    <span class="px-3 py-1 rounded-full text-xs font-semibold
-                                        <%= animal.status === 'HEALTHY' ? 'bg-green-200 text-green-800' : '' %>
-                                        <%= animal.status === 'WITHDRAWAL_LOCK' ? 'bg-red-200 text-red-800' : '' %>
-                                        <%= animal.status === 'QUARANTINE' ? 'bg-yellow-200 text-yellow-800' : '' %>">
-                                                        <%= animal.status %>
-                                                    </span>
-                                </div>
-                            </div>
-
-                            <!-- Health Score -->
-                            <div class="mb-4">
-                                <div class="flex justify-between text-sm text-gray-600 mb-1">
-                                    <span>Health Score</span>
-                                    <span class="font-semibold">
-                                        <%= animal.healthScore %>/100
-                                    </span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div class="h-2 rounded-full
-                  <%= animal.healthScore >= 70 ? 'bg-health-good' : '' %>
-                  <%= animal.healthScore >= 40 && animal.healthScore < 70 ? 'bg-health-warning' : '' %>
-                  <%= animal.healthScore < 40 ? 'bg-health-danger' : '' %>" style="width: <%= animal.healthScore %>%">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Withdrawal Warning -->
-                            <% if (animal.status==='WITHDRAWAL_LOCK' && animal.withdrawalEndsAt) { %>
-                                <% const now=new Date(); const diff=new Date(animal.withdrawalEndsAt) - now; const
-                                    daysRemaining=Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24))); %>
-                                    <div
-                                        class="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded-lg mb-4 text-sm">
-                                        <strong>🔒 LOCKED:</strong>
-                                        <%= daysRemaining %> day(s) remaining
-                                    </div>
-                                    <% } else if (animal.status==='HEALTHY' ) { %>
-                                        <div
-                                            class="bg-green-100 border border-green-400 text-green-700 px-3 py-2 rounded-lg mb-4 text-sm">
-                                            <strong>✅ Ready</strong> for production
-                                        </div>
-                                        <% } %>
-
-                                            <!-- Actions -->
-                                            <div class="grid grid-cols-2 gap-2 mb-2">
-                                                <a href="/animals/<%= animal._id %>"
-                                                    class="text-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">
-                                                    View Details
-                                                </a>
-                                                <a href="/animals/<%= animal._id %>/add-medicine"
-                                                    class="text-center px-3 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition text-sm">
-                                                    Add Medicine
-                                                </a>
-                                            </div>
-                                            <div class="grid grid-cols-2 gap-2">
-                                                <button
-                                                    onclick="openWeightModal('<%= animal._id %>', '<%= animal.name %>')"
-                                                    class="px-3 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition text-sm">
-                                                    📊 Log Weight
-                                                </button>
-                                                <button
-                                                    onclick="openFeedModal('<%= animal._id %>', '<%= animal.name %>')"
-                                                    class="px-3 py-2 bg-yellow-500 text-black rounded-lg hover:bg-yellow-600 transition text-sm font-semibold shadow-md">
-                                                    🌾 Log Feed
-                                                </button>
-                                            </div>
-                        </div>
-                        <% }) %>
+            <% if (animals.length===0) { %>
+                <div class="card-premium text-center py-16 animate-fade-in">
+                    <div class="w-28 h-28 mx-auto mb-6 rounded-full bg-brand-gradient flex items-center justify-center shadow-glow-emerald animate-float">
+                        <span class="text-6xl">🐄</span>
+                    </div>
+                    <h2 class="text-2xl font-extrabold text-gray-900 mb-2">No animals yet</h2>
+                    <p class="text-gray-500 mb-8 max-w-md mx-auto">Start by adding your first animal to the system and begin tracking its health journey.</p>
+                    <a href="/animals/add" class="btn-primary">Add First Animal</a>
                 </div>
-                <% } %>
-    </main>
+                <% } else { %>
+                    <div class="flex items-center justify-between mb-5">
+                        <h2 class="section-title text-xl font-bold text-gray-900">My Herd</h2>
+                    </div>
+                    <!-- Herd Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <% animals.forEach(animal=> { %>
+                            <div class="card-premium border-l-4
+                <%= animal.status === 'HEALTHY' ? 'status-healthy' : '' %>
+                <%= animal.status === 'WITHDRAWAL_LOCK' ? 'status-locked' : '' %>
+                <%= animal.status === 'QUARANTINE' ? 'status-quarantine' : '' %>">
+
+                                <!-- Animal Header -->
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h3 class="text-xl font-extrabold text-gray-900">
+                                            <%= animal.tagId %>
+                                        </h3>
+                                        <p class="text-sm text-gray-500">
+                                            <%= animal.species %>
+                                                <% if (animal.breed) { %> - <%= animal.breed %>
+                                                        <% } %>
+                                        </p>
+                                    </div>
+
+                                    <!-- Status Badge with Icon -->
+                                    <div class="flex items-center gap-2">
+                                        <% if (animal.status==='HEALTHY' ) { %>
+                                            <span class="text-xl">✅</span>
+                                            <% } else if (animal.status==='WITHDRAWAL_LOCK' ) { %>
+                                                <span class="text-xl">🔒</span>
+                                                <% } else if (animal.status==='QUARANTINE' ) { %>
+                                                    <span class="text-xl">⚠️</span>
+                                                    <% } %>
+                                                        <span class="
+                                            <%= animal.status === 'HEALTHY' ? 'badge-biosafe' : '' %>
+                                            <%= animal.status === 'WITHDRAWAL_LOCK' ? 'badge-locked' : '' %>
+                                            <%= animal.status === 'QUARANTINE' ? 'badge-warning' : '' %>">
+                                                            <%= animal.status %>
+                                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Health Score -->
+                                <div class="mb-4">
+                                    <div class="flex justify-between text-sm text-gray-500 mb-1">
+                                        <span>Health Score</span>
+                                        <span class="font-semibold text-gray-800">
+                                            <%= animal.healthScore %>/100
+                                        </span>
+                                    </div>
+                                    <div class="w-full bg-gray-100 rounded-full h-2.5">
+                                        <div class="h-2.5 rounded-full transition-all duration-700
+                      <%= animal.healthScore >= 70 ? 'bg-health-good' : '' %>
+                      <%= animal.healthScore >= 40 && animal.healthScore < 70 ? 'bg-health-warning' : '' %>
+                      <%= animal.healthScore < 40 ? 'bg-health-danger' : '' %>" style="width: <%= animal.healthScore %>%">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Withdrawal Warning -->
+                                <% if (animal.status==='WITHDRAWAL_LOCK' && animal.withdrawalEndsAt) { %>
+                                    <% const now=new Date(); const diff=new Date(animal.withdrawalEndsAt) - now; const
+                                        daysRemaining=Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24))); %>
+                                        <div
+                                            class="bg-red-50 border border-red-200 text-red-700 px-4 py-2.5 rounded-xl mb-4 text-sm flex items-center gap-2">
+                                            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                            <span><strong>LOCKED:</strong>
+                                            <%= daysRemaining %> day(s) remaining</span>
+                                        </div>
+                                        <% } else if (animal.status==='HEALTHY' ) { %>
+                                            <div
+                                                class="bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-2.5 rounded-xl mb-4 text-sm flex items-center gap-2">
+                                                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                <span><strong>Ready</strong> for production</span>
+                                            </div>
+                                            <% } %>
+
+                                                <!-- Actions -->
+                                                <div class="grid grid-cols-2 gap-2 mb-2">
+                                                    <a href="/animals/<%= animal._id %>"
+                                                        class="btn-ghost text-center px-3 py-2 text-sm">
+                                                        View Details
+                                                    </a>
+                                                    <a href="/animals/<%= animal._id %>/add-medicine"
+                                                        class="btn-secondary text-center px-3 py-2 text-sm">
+                                                        Add Medicine
+                                                    </a>
+                                                </div>
+                                                <div class="grid grid-cols-2 gap-2">
+                                                    <button
+                                                        onclick="openWeightModal('<%= animal._id %>', '<%= animal.name %>')"
+                                                        class="btn-primary px-3 py-2 text-sm">
+                                                        📊 Log Weight
+                                                    </button>
+                                                    <button
+                                                        onclick="openFeedModal('<%= animal._id %>', '<%= animal.name %>')"
+                                                        class="btn-gold px-3 py-2 text-sm">
+                                                        🌾 Log Feed
+                                                    </button>
+                                                </div>
+                            </div>
+                            <% }) %>
+                    </div>
+                    <% } %>
+        </main>
+    </div>
 
     <!-- Weight Logging Modal -->
-    <div id="weightModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">📊 Log Animal Weight</h2>
+    <div id="weightModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full animate-slide-up">
+            <h2 class="text-2xl font-extrabold text-gray-900 mb-6 flex items-center gap-2">
+                <span class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-xl">📊</span>
+                Log Animal Weight
+            </h2>
             <form id="weightForm">
                 <input type="hidden" id="weightAnimalId">
                 <input type="hidden" id="weightAnimalName">
 
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Weight (kg)</label>
-                    <input type="number" id="weightValue" step="0.1" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500">
+                    <input type="number" id="weightValue" step="0.1" required class="input-field w-full">
                 </div>
 
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
-                    <input type="date" id="weightDate" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500">
+                    <input type="date" id="weightDate" required class="input-field w-full">
                 </div>
 
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Notes (Optional)</label>
-                    <textarea id="weightNotes" rows="2"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500"></textarea>
+                    <textarea id="weightNotes" rows="2" class="input-field w-full"></textarea>
                 </div>
 
-                <div class="flex justify-end gap-4">
-                    <button type="button" onclick="closeWeightModal()"
-                        class="px-8 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-semibold">
+                <div class="flex justify-end gap-3">
+                    <button type="button" onclick="closeWeightModal()" class="btn-secondary px-6 py-2.5">
                         Cancel
                     </button>
-                    <button type="submit"
-                        class="px-8 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition font-semibold">
+                    <button type="submit" class="btn-primary px-6 py-2.5">
                         Save Weight
                     </button>
                 </div>
@@ -411,23 +427,24 @@
     </div>
 
     <!-- Feed Logging Modal -->
-    <div id="feedModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">🌾 Log Feed Consumption</h2>
+    <div id="feedModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full animate-slide-up">
+            <h2 class="text-2xl font-extrabold text-gray-900 mb-6 flex items-center gap-2">
+                <span class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-xl">🌾</span>
+                Log Feed Consumption
+            </h2>
             <form id="feedForm">
                 <input type="hidden" id="feedAnimalId">
                 <input type="hidden" id="feedAnimalName">
 
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Feed Amount (kg)</label>
-                    <input type="number" id="feedAmount" step="0.1" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500">
+                    <input type="number" id="feedAmount" step="0.1" required class="input-field w-full">
                 </div>
 
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Feed Type</label>
-                    <select id="feedType"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500">
+                    <select id="feedType" class="input-field w-full">
                         <option value="Standard Feed">Standard Feed</option>
                         <option value="Protein Mix">Protein Mix</option>
                         <option value="Grains">Grains</option>
@@ -439,23 +456,19 @@
 
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
-                    <input type="date" id="feedDate" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500">
+                    <input type="date" id="feedDate" required class="input-field w-full">
                 </div>
 
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Notes (Optional)</label>
-                    <textarea id="feedNotes" rows="2"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500"></textarea>
+                    <textarea id="feedNotes" rows="2" class="input-field w-full"></textarea>
                 </div>
 
-                <div class="flex justify-end gap-4">
-                    <button type="button" onclick="closeFeedModal()"
-                        class="px-8 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-semibold">
+                <div class="flex justify-end gap-3">
+                    <button type="button" onclick="closeFeedModal()" class="btn-secondary px-6 py-2.5">
                         Cancel
                     </button>
-                    <button type="submit"
-                        class="px-8 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition font-bold shadow-md">
+                    <button type="submit" class="btn-gold px-6 py-2.5">
                         Save Feed Record
                     </button>
                 </div>
@@ -464,6 +477,62 @@
     </div>
 
     <script>
+        // ── Sidebar drawer (mobile) ──────────────────────────────────
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+        function openSidebar() {
+            sidebar.classList.remove('-translate-x-full');
+            sidebarBackdrop.classList.remove('hidden');
+        }
+        function closeSidebar() {
+            sidebar.classList.add('-translate-x-full');
+            sidebarBackdrop.classList.add('hidden');
+        }
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                if (sidebar.classList.contains('-translate-x-full')) { openSidebar(); } else { closeSidebar(); }
+            });
+        }
+        if (sidebarBackdrop) {
+            sidebarBackdrop.addEventListener('click', closeSidebar);
+        }
+
+        // ── Time-aware greeting + current date ───────────────────────
+        (function () {
+            const hour = new Date().getHours();
+            const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+            const greetingEl = document.getElementById('greetingTime');
+            if (greetingEl) greetingEl.textContent = greeting;
+
+            const dateEl = document.getElementById('currentDate');
+            if (dateEl) {
+                dateEl.textContent = new Date().toLocaleDateString('en-IN', {
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+                });
+            }
+        })();
+
+        // ── Stat count-up animation ───────────────────────────────────
+        document.querySelectorAll('.countup').forEach((el) => {
+            const raw = el.textContent.trim();
+            const target = parseFloat(raw);
+            if (isNaN(target)) return; // leave non-numeric values untouched
+            const isFloat = raw.includes('.');
+            const duration = 900;
+            const start = performance.now();
+            function tick(now) {
+                const progress = Math.min((now - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const value = target * eased;
+                el.textContent = isFloat ? value.toFixed(1) : Math.round(value);
+                if (progress < 1) { requestAnimationFrame(tick); } else { el.textContent = raw; }
+            }
+            requestAnimationFrame(tick);
+        });
+
+        // ── Modal logic (preserved) ───────────────────────────────────
         // Set today's date as default
         document.getElementById('weightDate').valueAsDate = new Date();
         document.getElementById('feedDate').valueAsDate = new Date();
